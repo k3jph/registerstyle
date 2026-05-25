@@ -1,0 +1,12 @@
+
+\documentclass{article}
+\usepackage{registerstyle}
+\definepersonkv{p1}{name={Parent One},preferred={P1},parents={},index={One!Parent}}
+\definepersonkv{p2}{name={Parent Two},preferred={P2},parents={},index={Two!Parent}}
+\definepersonkv{c1}{name={Child One},preferred={C1},parents={p1,p2},index={One!Child}}
+\begin{document}
+\begin{childrenof}{p1}{p2}
+  \child{c1}{Test child.}
+\end{childrenof}
+\checkregister
+\end{document}
