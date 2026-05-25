@@ -1,7 +1,7 @@
 %% registerstyle.sty --- Lineage Genealogical Register Style
-%% Version 1.19  (2026-05-25)
+%% Version 1.22  (2026-05-25)
 
-\ProvidesPackage{registerstyle}[2026/05/25 v1.19 Lineage genealogical register style]
+\ProvidesPackage{registerstyle}[2026/05/25 v1.22 Lineage genealogical register style]
 
 
 \newif\ifr@index
@@ -279,49 +279,59 @@
   }%
 }
 
-\newcommand{\getgeneration}[1]{%
-  \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@generation@\r@id}{%
-    % already cached
-  }{%
-    \ifcsdef{r@generation@working@\r@id}{%
-      \r@warn{Cycle detected while computing generation for `\r@id'}%
-      \expandafter\xdef\csname r@generation@\r@id\endcsname{\r@unknowngeneration}%
+\newcommand{\r@computegeneration}[1]{%
+  \begingroup
+    \edef\r@target{\r@trimid{#1}}%
+    \ifcsdef{r@generation@\r@target}{%
+      % already cached
     }{%
-      \csdef{r@generation@working@\r@id}{1}%
-      \ifcsdef{r@parents@\r@id}{%
-        \edef\r@parents{\csuse{r@parents@\r@id}}%
-        \ifx\r@parents\@empty
-          \expandafter\xdef\csname r@generation@\r@id\endcsname{1}%
-        \else
-          \def\r@max{0}%
-          \def\r@checkparent##1{%
-            \edef\r@pid{\r@trimid{##1}}%
-            \ifx\r@pid\@empty
-              \r@warn{Empty parent id listed for `\r@id'}%
-            \else
-              \ifcsdef{r@parents@\r@pid}{%
-                \ifcsdef{r@generation@\r@pid}{}{\getgeneration{\r@pid}}%
-                \edef\r@pg{\csuse{r@generation@\r@pid}}%
-                \ifnum\r@pg>\r@max\relax \xdef\r@max{\r@pg}\fi
-              }{%
-                \r@warn{Undefined parent `\r@pid' listed for `\r@id'}%
-                \expandafter\xdef\csname r@generation@\r@pid\endcsname{\r@unknowngeneration}%
-              }%
-            \fi
-          }%
-          \expandafter\forcsvlist\expandafter\r@checkparent\expandafter{\r@parents}%
-          \edef\r@this{\the\numexpr\r@max+1\relax}%
-          \expandafter\xdef\csname r@generation@\r@id\endcsname{\r@this}%
-        \fi
+      \ifcsdef{r@generation@working@\r@target}{%
+        \r@warn{Cycle detected while computing generation for `\r@target'}%
+        \expandafter\xdef\csname r@generation@\r@target\endcsname{\r@unknowngeneration}%
       }{%
-        \r@warn{Undefined person `\r@id'; assigning generation \r@unknowngeneration}%
-        \expandafter\xdef\csname r@generation@\r@id\endcsname{\r@unknowngeneration}%
+        \csdef{r@generation@working@\r@target}{1}%
+        \ifcsdef{r@parents@\r@target}{%
+          \edef\r@parents{\csuse{r@parents@\r@target}}%
+          \ifx\r@parents\@empty
+            \expandafter\xdef\csname r@generation@\r@target\endcsname{1}%
+          \else
+            \def\r@max{0}%
+            \def\r@checkparent##1{%
+              \edef\r@pid{\r@trimid{##1}}%
+              \ifx\r@pid\@empty
+                \r@warn{Empty parent id listed for `\r@target'}%
+              \else
+                \ifcsdef{r@parents@\r@pid}{%
+                  \ifcsdef{r@generation@\r@pid}{}{\r@computegeneration{\r@pid}}%
+                  \edef\r@pg{\csuse{r@generation@\r@pid}}%
+                  \ifnum\r@pg>\r@max\relax \xdef\r@max{\r@pg}\fi
+                }{%
+                  \r@warn{Undefined parent `\r@pid' listed for `\r@target'}%
+                  \expandafter\xdef\csname r@generation@\r@pid\endcsname{\r@unknowngeneration}%
+                }%
+              \fi
+            }%
+            \expandafter\forcsvlist\expandafter\r@checkparent\expandafter{\r@parents}%
+            \edef\r@this{\the\numexpr\r@max+1\relax}%
+            \expandafter\xdef\csname r@generation@\r@target\endcsname{\r@this}%
+          \fi
+        }{%
+          \r@warn{Undefined person `\r@target'; assigning generation \r@unknowngeneration}%
+          \expandafter\xdef\csname r@generation@\r@target\endcsname{\r@unknowngeneration}%
+        }%
+        \csundef{r@generation@working@\r@target}%
       }%
-      \csundef{r@generation@working@\r@id}%
     }%
-  }%
-  \csuse{r@generation@\r@id}%
+  \endgroup
+}
+
+\newcommand{\getgeneration}[1]{%
+  \begingroup
+    \edef\r@target{\r@trimid{#1}}%
+    \r@computegeneration{\r@target}%
+    \xdef\r@generationresult{\csuse{r@generation@\r@target}}%
+  \endgroup
+  \r@generationresult
 }
 
 
@@ -336,6 +346,7 @@
 \pretocmd{\subparagraph}{\global\register@afterheadingtrue}{}{}
 
 \newcommand{\r@alist}{} % scratch list
+\newif\ifr@ancestorchain@lineage
 
 \newcommand{\collectancestors}[1]{%
   \edef\r@id{\r@trimid{#1}}%
@@ -344,10 +355,23 @@
   }{%
     \csdef{r@ancestor@seen@\r@id}{1}%
     \ifcsdef{r@parents@\r@id}{%
-      \edef\r@plist{\csuse{r@parents@\r@id}}%
-      \ifx\r@plist\@empty\else
-        \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
-      \fi
+      \ifcsdef{r@lineageparent@\r@id}{%
+        \ifcsempty{r@lineageparent@\r@id}{%
+          \edef\r@plist{\csuse{r@parents@\r@id}}%
+          \ifx\r@plist\@empty\else
+            \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+          \fi
+        }{%
+          \r@ancestorchain@lineagetrue
+          \edef\r@lineagepid{\csuse{r@lineageparent@\r@id}}%
+          \expandafter\addoneancestor\expandafter{\r@lineagepid}%
+        }%
+      }{%
+        \edef\r@plist{\csuse{r@parents@\r@id}}%
+        \ifx\r@plist\@empty\else
+          \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+        \fi
+      }%
     }{%
       \r@warn{Undefined person `\r@id' while collecting ancestors}%
     }%
@@ -388,6 +412,7 @@
 \newcommand{\formatparents}[1]{%
   \begingroup
     \def\r@alist{}%
+    \r@ancestorchain@lineagefalse
     \collectancestors{#1}%
     \edef\r@plist{\r@alist}%
     \ifx\r@plist\@empty
@@ -402,10 +427,14 @@
           \edef\r@pid{\r@trimid{##1}}%
           \advance\r@i by 1\relax
           \ifnum\r@i>1
-            \ifnum\r@i=\r@pcnt
-              \space and\space
-            \else
+            \ifr@ancestorchain@lineage
               ,\space
+            \else
+              \ifnum\r@i=\r@pcnt
+                \space and\space
+              \else
+                ,\space
+              \fi
             \fi
           \fi
           \ifabbrevparents

@@ -2,7 +2,7 @@
 
 `registerstyle` is a LaTeX package for writing genealogical register-style prose.
 
-Current development version: 1.19.
+Current development version: 1.20 packaging fixture.
 
 ## What it currently does
 
@@ -34,6 +34,6 @@ pdflatex source/registerstyle.dtx
 
 ## Examples and tests
 
-The `examples/` directory contains a small compilable example. The `testfiles/` directory contains simple smoke tests intended for manual compilation during early development.
+The `examples/` directory contains a minimal register and a fuller Stuart four-generation fixture. The `testfiles/` directory contains simple smoke tests intended for manual compilation during early development, including a copy of the Stuart fixture for regression testing.
 
-A fuller Stuart four-generation example is planned once validation and package structure settle.
+The Stuart example includes legitimate descendants of James VI and I and Anne of Denmark through four generations, with spouses included only where needed to establish parentage. Miscarriages, stillbirths, illegitimate lines, alleged lines, and morganatic branches are omitted from the example scope.
