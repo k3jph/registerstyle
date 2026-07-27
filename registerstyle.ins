@@ -1,9 +1,42 @@
+%% registerstyle.ins
+%% Copyright 2026 James P. Howard, II <jh@jameshoward.us>
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+
 \input docstrip.tex
 \keepsilent
 \askforoverwritefalse
-\nopreamble
-\nopostamble
+
+\preamble
+
+registerstyle --- NEHGS-style genealogical register
+Copyright 2026 James P. Howard, II
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License, either version 1.3c
+of this license or (at your option) any later version.
+The latest version of this license is in
+  https://www.latex-project.org/lppl.txt
+
+\endpreamble
+
 \generate{%
   \file{registerstyle.sty}{\from{source/registerstyle.dtx}{package}}%
 }
+
+\obeyspaces
+\Msg{*****************************************************}
+\Msg{*                                                   *}
+\Msg{* To finish the installation, move registerstyle.sty*}
+\Msg{* into a directory searched by TeX.                 *}
+\Msg{*                                                   *}
+\Msg{* To produce the documentation, run                 *}
+\Msg{*   pdflatex source/registerstyle.dtx               *}
+\Msg{*                                                   *}
+\Msg{* Happy typesetting!                                *}
+\Msg{*                                                   *}
+\Msg{*****************************************************}
+
 \endbatchfile
