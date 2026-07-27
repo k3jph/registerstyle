@@ -5,6 +5,7 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,6 +26,8 @@ jobs:
             keyval
             xspace
             datetime2
+            datetime2-english
+            tracklang
             hyperref
             imakeidx
             ltxdoc
