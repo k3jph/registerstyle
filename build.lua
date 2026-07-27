@@ -4,9 +4,9 @@
 module = "registerstyle"
 
 sourcefiledir = "source"
-sourcefiles   = {"*.dtx"}
+sourcefiles   = {"*.dtx", "*.ins"}
 installfiles  = {"*.sty"}
-unpackfiles   = {"*.dtx"}
+unpackfiles   = {"*.ins"}
 
 typesetfiles  = {"*.dtx"}
 typesetsourcefiles = {"*.dtx"}

@@ -1,4 +1,5 @@
 \documentclass{article}
+\input regression-test.tex
 \usepackage[noindex]{registerstyle}
 
 \definepersonkv{male-person}{
