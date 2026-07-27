@@ -1,0 +1,168 @@
+\documentclass{article}
+
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents,noindex]{registerstyle}
+
+\title{Multi-Marriage Example}
+\author{registerstyle example}
+\date{}
+
+% A person with two marriages
+
+\definepersonkv{thomas-ward}{
+  name        = {Thomas Ward},
+  preferred   = {Thomas},
+  parents     = {},
+  sex         = {M},
+  birth       = {1800-04-12},
+  birth-place = {Hartford, Connecticut},
+  death       = {1870-08-30},
+  death-place = {New Haven, Connecticut}
+}
+
+\definepersonkv{sarah-clark}{
+  name        = {Sarah Clark},
+  preferred   = {Sarah},
+  parents     = {},
+  sex         = {F},
+  birth       = {1805-02-18},
+  birth-place = {New London, Connecticut},
+  death       = {1840-06-15},
+  death-place = {Hartford, Connecticut}
+}
+
+\definepersonkv{elizabeth-brown}{
+  name        = {Elizabeth Brown},
+  preferred   = {Elizabeth},
+  parents     = {},
+  sex         = {F},
+  birth       = {1815-09-03},
+  birth-place = {Middletown, Connecticut},
+  death       = {1885-12-20},
+  death-place = {New Haven, Connecticut}
+}
+
+% Children from first marriage
+\definepersonkv{william-ward}{
+  name        = {William Henry Ward},
+  preferred   = {William},
+  parents     = {thomas-ward,sarah-clark},
+  lineage-parent = {thomas-ward},
+  sex         = {M},
+  birth       = {1830-07-04},
+  birth-place = {Hartford, Connecticut}
+}
+
+\definepersonkv{anna-ward}{
+  name        = {Anna Maria Ward},
+  preferred   = {Anna},
+  parents     = {thomas-ward,sarah-clark},
+  lineage-parent = {thomas-ward},
+  sex         = {F},
+  birth       = {1833-01-22},
+  birth-place = {Hartford, Connecticut},
+  death       = {1835-03-10},
+  death-place = {Hartford, Connecticut}
+}
+
+% Children from second marriage
+\definepersonkv{charles-ward}{
+  name        = {Charles Edward Ward},
+  preferred   = {Charles},
+  parents     = {thomas-ward,elizabeth-brown},
+  lineage-parent = {thomas-ward},
+  sex         = {M},
+  birth       = {1845-11-15},
+  birth-place = {New Haven, Connecticut}
+}
+
+\definepersonkv{mary-ward}{
+  name        = {Mary Jane Ward},
+  preferred   = {Mary},
+  parents     = {thomas-ward,elizabeth-brown},
+  lineage-parent = {thomas-ward},
+  sex         = {F},
+  birth       = {1848-03-28},
+  birth-place = {New Haven, Connecticut}
+}
+
+% Record both marriages
+\addmarriage{thomas-ward}{
+  spouse = sarah-clark,
+  date   = 1828-10-20,
+  place  = {Hartford, Connecticut}
+}
+
+\addmarriage{thomas-ward}{
+  spouse = elizabeth-brown,
+  date   = 1843-05-12,
+  place  = {New Haven, Connecticut}
+}
+
+\begin{document}
+\maketitle
+
+This example demonstrates the multi-marriage support in
+\textsf{registerstyle}.
+
+\begin{registersection}
+
+\generationheading{thomas-ward}
+
+\mainperson{thomas-ward} was born \getpersonbirthdate{thomas-ward}
+in \getpersonbirthplace{thomas-ward}.
+\HeSheThey{thomas-ward} married first
+\getpersonname{sarah-clark} on
+\getmarriagedate{thomas-ward}{1} in
+\getmarriageplace{thomas-ward}{1}.
+\getpersonname{sarah-clark} died
+\getpersondeathdate{sarah-clark} in
+\getpersondeathplace{sarah-clark}.
+\getpersonname{thomas-ward} married second
+\getpersonname{elizabeth-brown} on
+\getmarriagedate{thomas-ward}{2} in
+\getmarriageplace{thomas-ward}{2}.
+\HeSheThey{thomas-ward} died
+\getpersondeathdate{thomas-ward} in
+\getpersondeathplace{thomas-ward}.
+
+Children of \shortname{thomas-ward} and
+\shortname{sarah-clark} (first marriage):
+\begin{childrenof}{thomas-ward}{sarah-clark}
+  \childref{william-ward}{b.~\getpersonbirthdate{william-ward},
+    \getpersonbirthplace{william-ward}.}
+  \child{anna-ward}{b.~\getpersonbirthdate{anna-ward},
+    \getpersonbirthplace{anna-ward};
+    d.~\getpersondeathdate{anna-ward},
+    \getpersondeathplace{anna-ward}.
+    Died young.}
+\end{childrenof}
+
+Children of \shortname{thomas-ward} and
+\shortname{elizabeth-brown} (second marriage):
+\begin{childrenof}{thomas-ward}{elizabeth-brown}
+  \childref{charles-ward}{b.~\getpersonbirthdate{charles-ward},
+    \getpersonbirthplace{charles-ward}.}
+  \childref{mary-ward}{b.~\getpersonbirthdate{mary-ward},
+    \getpersonbirthplace{mary-ward}.}
+\end{childrenof}
+
+\generationheading{william-ward}
+
+\mainperson{william-ward} was born
+\getpersonbirthdate{william-ward} in
+\getpersonbirthplace{william-ward}.
+
+\mainperson{charles-ward} was born
+\getpersonbirthdate{charles-ward} in
+\getpersonbirthplace{charles-ward}.
+
+\mainperson{mary-ward} was born
+\getpersonbirthdate{mary-ward} in
+\getpersonbirthplace{mary-ward}.
+
+\end{registersection}
+
+\checkregister
+
+\end{document}

@@ -1,0 +1,96 @@
+\documentclass{article}
+
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\title{Getting Started with \textsf{registerstyle}}
+\author{}
+\date{}
+
+% Define two founding-generation persons
+\definepersonkv{john-doe}{
+  name        = {John Doe},
+  preferred   = {John},
+  parents     = {},
+  sex         = {M},
+  birth       = {1820-03-15},
+  birth-place = {Boston, Massachusetts},
+  death       = {1895-11-22},
+  death-place = {Springfield, Massachusetts},
+  occupation  = {farmer}
+}
+
+\definepersonkv{mary-smith}{
+  name        = {Mary Smith},
+  preferred   = {Mary},
+  parents     = {},
+  sex         = {F},
+  birth       = {1825-06-20},
+  birth-place = {Providence, Rhode Island},
+  death       = {1900-01-05},
+  death-place = {Springfield, Massachusetts}
+}
+
+% Define a second-generation child
+\definepersonkv{james-doe}{
+  name        = {James Henry Doe},
+  preferred   = {James},
+  parents     = {john-doe,mary-smith},
+  lineage-parent = {john-doe},
+  sex         = {M},
+  birth       = {1850-11-02},
+  birth-place = {Springfield, Massachusetts},
+  baptism     = {1850-12-25},
+  baptism-place = {First Church, Springfield, Massachusetts}
+}
+
+% Record the marriage
+\addmarriage{john-doe}{
+  spouse = mary-smith,
+  date   = 1845-09-10,
+  place  = {Springfield, Massachusetts}
+}
+
+\begin{document}
+\maketitle
+
+This document demonstrates the basic features of the
+\textsf{registerstyle} package.
+
+\begin{registersection}
+
+\generationheading{john-doe}
+
+\mainperson{john-doe} was born \getpersonbirthdate{john-doe}
+in \getpersonbirthplace{john-doe}.\registersource{%
+  Massachusetts vital records, Town of Boston.}
+\HeSheThey{john-doe} was a \getpersonoccupation{john-doe}
+in Springfield.
+\HeSheThey{john-doe} married
+\getpersonname{mary-smith} on
+\getmarriagedate{john-doe}{1} in
+\getmarriageplace{john-doe}{1}.
+\HeSheThey{john-doe} died
+\getpersondeathdate{john-doe} in
+\getpersondeathplace{john-doe}.
+
+The child of \shortname{john-doe} and \shortname{mary-smith}:
+\begin{childrenof}{john-doe}{mary-smith}
+  \childref{james-doe}{b.~\getpersonbirthdate{james-doe},
+    \getpersonbirthplace{james-doe};
+    bp.~\getpersonbaptismdate{james-doe},
+    \getpersonbaptismplace{james-doe}.}
+\end{childrenof}
+
+\generationheading{james-doe}
+
+\mainperson{james-doe} was born \getpersonbirthdate{james-doe}
+in \getpersonbirthplace{james-doe} and was baptized
+\getpersonbaptismdate{james-doe} at
+\getpersonbaptismplace{james-doe}.
+
+\end{registersection}
+
+\checkregister
+
+\end{document}
