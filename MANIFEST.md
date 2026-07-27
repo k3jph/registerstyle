@@ -15,7 +15,7 @@ These are files in the development repository that are not distributed.
 These are source files for the package.
 
 * `source/registerstyle.dtx`
-* `registerstyle.ins`
+* `source/registerstyle.ins`
 
 ## Derived files
 
@@ -40,11 +40,20 @@ These files are generated from the source files.
 ## Test files
 
 * `testfiles/basic.lvt`
+* `testfiles/basic.tlg`
 * `testfiles/children.lvt`
+* `testfiles/children.tlg`
 * `testfiles/dates.lvt`
+* `testfiles/dates.tlg`
 * `testfiles/marriage.lvt`
+* `testfiles/marriage.tlg`
 * `testfiles/pronouns.lvt`
+* `testfiles/pronouns.tlg`
 * `testfiles/generation.lvt`
+* `testfiles/generation.tlg`
 * `testfiles/validation.lvt`
+* `testfiles/validation.tlg`
 * `testfiles/childref.lvt`
+* `testfiles/childref.tlg`
 * `testfiles/options.lvt`
+* `testfiles/options.tlg`

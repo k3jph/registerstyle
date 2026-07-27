@@ -36,7 +36,13 @@ the *New England Historical and Genealogical Register* (NEHGS).
 From the package root:
 
 ```sh
-latex registerstyle.ins
+l3build unpack
+```
+
+Or manually:
+
+```sh
+latex source/registerstyle.ins
 ```
 
 This extracts `registerstyle.sty` from `source/registerstyle.dtx`.
@@ -45,9 +51,13 @@ Move the resulting `.sty` file to a directory searched by TeX.
 To build the documentation:
 
 ```sh
-pdflatex source/registerstyle.dtx
-makeindex -s gind.ist -o registerstyle.ind registerstyle.idx
-pdflatex source/registerstyle.dtx
+l3build doc
+```
+
+To run the test suite:
+
+```sh
+l3build check
 ```
 
 ## Quick start
