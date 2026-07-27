@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        uses: zauguin/install-texlive@v3
+        with:
+          packages: >
+            l3build
+            latex
+            latex-bin
+            xparse
+            enumitem
+            etoolbox
+            keyval
+            xspace
+            datetime2
+            hyperref
+            imakeidx
+            ltxdoc
+            lm
+            fontenc
+
+      - name: Build package
+        run: l3build unpack
+
+      - name: Run tests
+        run: l3build check
+
+      - name: Build documentation
+        run: l3build doc

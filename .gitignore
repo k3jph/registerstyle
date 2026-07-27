@@ -1,3 +1,4 @@
+# LaTeX build artifacts
 *.aux
 *.glo
 *.gls
@@ -12,3 +13,16 @@
 *.lot
 *.pdf
 *.synctex.gz
+*.dvi
+*.fls
+*.fdb_latexmk
+
+# l3build
+build/
+*.zip
+
+# Editor
+*.swp
+*.swo
+*~
+.DS_Store
