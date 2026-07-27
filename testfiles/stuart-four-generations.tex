@@ -1,0 +1,872 @@
+\documentclass{article}
+
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents]{registerstyle}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{makeidx}
+
+\title{A Small Stuart Register}
+\author{registerstyle example}
+\date{}
+
+% Scope: legitimate descendants of James VI and I and Anne of Denmark
+% through the first four generations. Spouses are included only where
+% needed to establish parentage. Miscarriages, stillbirths, illegitimate
+% lines, alleged lines, and morganatic branches are omitted.
+
+% Generation 1
+\definepersonkv{james-vi-i}{
+  name        = {James VI and I},
+  preferred   = {James},
+  parents     = {},
+  birth       = {1566-06-19},
+  birth-place = {Edinburgh Castle, Edinburgh, Scotland},
+  death       = {1625-03-27},
+  death-place = {Theobalds House, Hertfordshire, England},
+  index       = {James VI and I}
+}
+
+\definepersonkv{anne-denmark}{
+  name        = {Anne of Denmark},
+  preferred   = {Anne},
+  parents     = {},
+  birth       = {1574-12-12},
+  birth-place = {Skanderborg Castle, Denmark},
+  death       = {1619-03-02},
+  death-place = {Hampton Court Palace, England},
+  index       = {Anne of Denmark}
+}
+
+% Generation 2: children of James VI and I and Anne of Denmark
+\definepersonkv{henry-frederick}{
+  name        = {Henry Frederick, Prince of Wales},
+  preferred   = {Henry},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1594-02-19},
+  death       = {1612-11-06},
+  index       = {Henry Frederick, Prince of Wales}
+}
+
+\definepersonkv{elizabeth-stuart}{
+  name        = {Elizabeth Stuart, Queen of Bohemia},
+  preferred   = {Elizabeth},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1596-08-19},
+  death       = {1662-02-13},
+  index       = {Stuart!Elizabeth, Queen of Bohemia}
+}
+
+\definepersonkv{margaret-stuart}{
+  name        = {Margaret Stuart},
+  preferred   = {Margaret},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1598-12-24},
+  birth-place = {Dalkeith Palace, Dalkeith, Scotland},
+  index       = {Stuart!Margaret}
+}
+
+\definepersonkv{charles-i}{
+  name        = {Charles I},
+  preferred   = {Charles},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1600-11-19},
+  birth-place = {Dunfermline Palace, Fife, Scotland},
+  death       = {1649-01-30},
+  death-place = {Whitehall, Westminster, England},
+  index       = {Charles I}
+}
+
+\definepersonkv{robert-kintyre}{
+  name        = {Robert Stuart, Duke of Kintyre},
+  preferred   = {Robert},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1602-01-18},
+  birth-place = {Dunfermline Palace, Fife, Scotland},
+  death       = {1602-05-27},
+  death-place = {Dunfermline Palace, Fife, Scotland},
+  index       = {Stuart!Robert, Duke of Kintyre}
+}
+
+\definepersonkv{mary-stuart-1605}{
+  name        = {Mary Stuart},
+  preferred   = {Mary},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1605-04-08},
+  birth-place = {Greenwich Palace, London, England},
+  death       = {1607-09-16},
+  death-place = {Stanwell Park, Stanwell, England},
+  index       = {Stuart!Mary, 1605--1607}
+}
+
+\definepersonkv{sophia-stuart}{
+  name        = {Sophia Stuart},
+  preferred   = {Sophia},
+  parents     = {james-vi-i,anne-denmark},
+  lineage-parent = {james-vi-i},
+  birth       = {1606-06-22},
+  birth-place = {Greenwich Palace, London, England},
+  death       = {1606-06-23},
+  death-place = {Greenwich Palace, London, England},
+  index       = {Stuart!Sophia}
+}
+
+% Spouses for Generation 2 descendants
+\definepersonkv{frederick-v}{
+  name        = {Frederick V, Elector Palatine},
+  preferred   = {Frederick},
+  parents     = {},
+  birth       = {1596-08-26},
+  death       = {1632-11-29},
+  index       = {Frederick V, Elector Palatine}
+}
+
+\definepersonkv{henrietta-maria}{
+  name        = {Henrietta Maria of France},
+  preferred   = {Henrietta Maria},
+  parents     = {},
+  birth       = {1609-11-25},
+  death       = {1669-09-10},
+  index       = {Henrietta Maria of France}
+}
+
+% Generation 3: children of Elizabeth Stuart and Frederick V
+\definepersonkv{frederick-henry-palatinate}{
+  name      = {Frederick Henry, Hereditary Prince of the Palatinate},
+  preferred = {Frederick Henry},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1614-01-01},
+  death     = {1629-01-07},
+  index     = {Palatinate!Frederick Henry}
+}
+
+\definepersonkv{charles-i-louis}{
+  name      = {Charles I Louis, Elector Palatine},
+  preferred = {Charles Louis},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1617-12-22},
+  death     = {1680-08-28},
+  index     = {Charles I Louis, Elector Palatine}
+}
+
+\definepersonkv{elisabeth-palatinate}{
+  name      = {Elisabeth of the Palatinate},
+  preferred = {Elisabeth},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1618-12-26},
+  death     = {1680-02-11},
+  index     = {Palatinate!Elisabeth}
+}
+
+\definepersonkv{rupert-palatinate}{
+  name      = {Rupert, Count Palatine of the Rhine},
+  preferred = {Rupert},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1619-12-17},
+  death     = {1682-11-29},
+  index     = {Rupert, Count Palatine of the Rhine}
+}
+
+\definepersonkv{maurice-palatinate}{
+  name      = {Maurice of the Palatinate},
+  preferred = {Maurice},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1621-01-16},
+  death     = {1652-09-01},
+  index     = {Palatinate!Maurice}
+}
+
+\definepersonkv{louise-hollandine}{
+  name      = {Louise Hollandine of the Palatinate},
+  preferred = {Louise Hollandine},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1622-04-18},
+  death     = {1709-02-11},
+  index     = {Palatinate!Louise Hollandine}
+}
+
+\definepersonkv{louis-palatinate}{
+  name      = {Louis of the Palatinate},
+  preferred = {Louis},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1624-08-21},
+  death     = {1624-12-24},
+  index     = {Palatinate!Louis}
+}
+
+\definepersonkv{edward-palatinate}{
+  name      = {Edward, Count Palatine of Simmern},
+  preferred = {Edward},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1625-10-05},
+  death     = {1663-03-10},
+  index     = {Edward, Count Palatine of Simmern}
+}
+
+\definepersonkv{henriette-marie-palatinate}{
+  name      = {Henriette Marie of the Palatinate},
+  preferred = {Henriette Marie},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1626-07-07},
+  death     = {1651-09-18},
+  index     = {Palatinate!Henriette Marie}
+}
+
+\definepersonkv{john-philip-frederick}{
+  name      = {John Philip Frederick of the Palatinate},
+  preferred = {John Philip Frederick},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1627-09-26},
+  death     = {1650-02-16},
+  index     = {Palatinate!John Philip Frederick}
+}
+
+\definepersonkv{charlotte-palatinate}{
+  name      = {Charlotte of the Palatinate},
+  preferred = {Charlotte},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1628-12-19},
+  death     = {1631-01-14},
+  index     = {Palatinate!Charlotte}
+}
+
+\definepersonkv{sophia-hanover}{
+  name        = {Sophia of Hanover},
+  preferred   = {Sophia},
+  parents     = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth       = {1630-10-14},
+  birth-place = {The Hague, Dutch Republic},
+  death       = {1714-06-08},
+  death-place = {Herrenhausen Gardens, Hanover},
+  index       = {Sophia of Hanover}
+}
+
+\definepersonkv{gustavus-adolphus-palatinate}{
+  name      = {Gustavus Adolphus of the Palatinate},
+  preferred = {Gustavus Adolphus},
+  parents   = {elizabeth-stuart,frederick-v},
+  lineage-parent = {elizabeth-stuart},
+  birth     = {1632-01-14},
+  death     = {1641-01-01},
+  index     = {Palatinate!Gustavus Adolphus}
+}
+
+% Generation 3: children of Charles I and Henrietta Maria
+\definepersonkv{charles-james-stuart}{
+  name      = {Charles James, Duke of Cornwall and Rothesay},
+  preferred = {Charles James},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1629-05-13},
+  death     = {1629-05-13},
+  index     = {Stuart!Charles James, Duke of Cornwall and Rothesay}
+}
+
+\definepersonkv{charles-ii}{
+  name      = {Charles II},
+  preferred = {Charles},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1630-05-29},
+  death     = {1685-02-06},
+  index     = {Charles II}
+}
+
+\definepersonkv{mary-princess-royal}{
+  name      = {Mary, Princess Royal},
+  preferred = {Mary},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1631-11-04},
+  death     = {1660-12-24},
+  index     = {Mary, Princess Royal}
+}
+
+\definepersonkv{james-ii-vii}{
+  name      = {James II and VII},
+  preferred = {James},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1633-10-14},
+  death     = {1701-09-16},
+  index     = {James II and VII}
+}
+
+\definepersonkv{elizabeth-stuart-1635}{
+  name      = {Elizabeth Stuart},
+  preferred = {Elizabeth},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1635-12-29},
+  death     = {1650-09-08},
+  index     = {Stuart!Elizabeth, 1635--1650}
+}
+
+\definepersonkv{anne-stuart-1637}{
+  name      = {Anne Stuart},
+  preferred = {Anne},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1637-03-17},
+  death     = {1640-11-05},
+  index     = {Stuart!Anne, 1637--1640}
+}
+
+\definepersonkv{catherine-stuart}{
+  name      = {Catherine Stuart},
+  preferred = {Catherine},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1639-06-29},
+  death     = {1639-06-29},
+  index     = {Stuart!Catherine}
+}
+
+\definepersonkv{henry-gloucester}{
+  name      = {Henry, Duke of Gloucester},
+  preferred = {Henry},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1640-07-08},
+  death     = {1660-09-18},
+  index     = {Henry, Duke of Gloucester}
+}
+
+\definepersonkv{henrietta-anne}{
+  name      = {Henrietta Anne of England},
+  preferred = {Henrietta Anne},
+  parents   = {charles-i,henrietta-maria},
+  lineage-parent = {charles-i},
+  birth     = {1644-06-16},
+  death     = {1670-06-30},
+  index     = {Henrietta Anne of England}
+}
+
+% Spouses for Generation 3 descendants
+\definepersonkv{charlotte-hesse-kassel}{
+  name      = {Charlotte of Hesse-Kassel},
+  preferred = {Charlotte},
+  parents   = {},
+  birth     = {1627-11-20},
+  death     = {1686-03-16},
+  index     = {Charlotte of Hesse-Kassel}
+}
+
+\definepersonkv{anne-gonzaga}{
+  name      = {Anne Gonzaga},
+  preferred = {Anne},
+  parents   = {},
+  death     = {1684-07-06},
+  index     = {Gonzaga!Anne}
+}
+
+\definepersonkv{ernest-augustus-hanover}{
+  name      = {Ernest Augustus, Elector of Hanover},
+  preferred = {Ernest Augustus},
+  parents   = {},
+  birth     = {1629-11-20},
+  death     = {1698-01-23},
+  index     = {Ernest Augustus, Elector of Hanover}
+}
+
+\definepersonkv{william-ii-orange}{
+  name      = {William II, Prince of Orange},
+  preferred = {William},
+  parents   = {},
+  birth     = {1626-05-27},
+  death     = {1650-11-06},
+  index     = {William II, Prince of Orange}
+}
+
+\definepersonkv{anne-hyde}{
+  name      = {Anne Hyde},
+  preferred = {Anne},
+  parents   = {},
+  birth     = {1637-03-12},
+  death     = {1671-03-31},
+  index     = {Hyde!Anne}
+}
+
+\definepersonkv{mary-of-modena}{
+  name      = {Mary of Modena},
+  preferred = {Mary},
+  parents   = {},
+  birth     = {1658-10-05},
+  death     = {1718-05-07},
+  index     = {Mary of Modena}
+}
+
+\definepersonkv{philippe-orleans}{
+  name      = {Philippe I, Duke of Orleans},
+  preferred = {Philippe},
+  parents   = {},
+  birth     = {1640-09-21},
+  death     = {1701-06-09},
+  index     = {Philippe I, Duke of Orleans}
+}
+
+% Generation 4: legitimate non-morganatic descendants through Elizabeth Stuart
+\definepersonkv{charles-ii-palatine}{
+  name      = {Charles II, Elector Palatine},
+  preferred = {Charles},
+  parents   = {charles-i-louis,charlotte-hesse-kassel},
+  lineage-parent = {charles-i-louis},
+  birth     = {1651-03-31},
+  death     = {1685-05-26},
+  index     = {Charles II, Elector Palatine}
+}
+
+\definepersonkv{elizabeth-charlotte-palatinate}{
+  name      = {Elizabeth Charlotte, Princess Palatine},
+  preferred = {Elizabeth Charlotte},
+  parents   = {charles-i-louis,charlotte-hesse-kassel},
+  lineage-parent = {charles-i-louis},
+  birth     = {1652-05-27},
+  death     = {1722-12-08},
+  index     = {Palatinate!Elizabeth Charlotte}
+}
+
+\definepersonkv{friedrich-palatinate-1653}{
+  name      = {Friedrich of the Palatinate},
+  preferred = {Friedrich},
+  parents   = {charles-i-louis,charlotte-hesse-kassel},
+  lineage-parent = {charles-i-louis},
+  birth     = {1653-05-12},
+  death     = {1653-05-13},
+  index     = {Palatinate!Friedrich, 1653}
+}
+
+\definepersonkv{luise-marie-palatinate}{
+  name      = {Luise Marie of the Palatinate},
+  preferred = {Luise Marie},
+  parents   = {edward-palatinate,anne-gonzaga},
+  lineage-parent = {edward-palatinate},
+  birth     = {1647-07-23},
+  death     = {1679-03-11},
+  index     = {Palatinate!Luise Marie}
+}
+
+\definepersonkv{anne-henriette-palatinate}{
+  name      = {Anne Henriette of Bavaria},
+  preferred = {Anne Henriette},
+  parents   = {edward-palatinate,anne-gonzaga},
+  lineage-parent = {edward-palatinate},
+  birth     = {1648-07-23},
+  death     = {1723-02-23},
+  index     = {Bavaria!Anne Henriette}
+}
+
+\definepersonkv{benedicta-henrietta}{
+  name      = {Benedicta Henrietta of the Palatinate},
+  preferred = {Benedicta Henrietta},
+  parents   = {edward-palatinate,anne-gonzaga},
+  lineage-parent = {edward-palatinate},
+  birth     = {1652-03-14},
+  death     = {1730-08-12},
+  index     = {Palatinate!Benedicta Henrietta}
+}
+
+\definepersonkv{george-i}{
+  name      = {George I of Great Britain},
+  preferred = {George},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1660-06-07},
+  death     = {1727-06-22},
+  index     = {George I of Great Britain}
+}
+
+\definepersonkv{frederick-augustus-hanover}{
+  name      = {Frederick Augustus of Brunswick-Luneburg},
+  preferred = {Frederick Augustus},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1661-10-03},
+  death     = {1691-06-10},
+  index     = {Brunswick-Luneburg!Frederick Augustus}
+}
+
+\definepersonkv{maximilian-william-hanover}{
+  name      = {Maximilian William of Brunswick-Luneburg},
+  preferred = {Maximilian William},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1666-12-13},
+  death     = {1726-06-27},
+  index     = {Brunswick-Luneburg!Maximilian William}
+}
+
+\definepersonkv{sophia-charlotte-prussia}{
+  name      = {Sophia Charlotte of Hanover},
+  preferred = {Sophia Charlotte},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1668-10-02},
+  death     = {1705-01-21},
+  index     = {Hanover!Sophia Charlotte}
+}
+
+\definepersonkv{charles-philip-hanover}{
+  name      = {Charles Philip of Brunswick-Luneburg},
+  preferred = {Charles Philip},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1669-10-13},
+  death     = {1690-01-01},
+  index     = {Brunswick-Luneburg!Charles Philip}
+}
+
+\definepersonkv{christian-henry-hanover}{
+  name      = {Christian Henry of Brunswick-Luneburg},
+  preferred = {Christian Henry},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1671-09-29},
+  death     = {1703-07-31},
+  index     = {Brunswick-Luneburg!Christian Henry}
+}
+
+\definepersonkv{ernest-augustus-york}{
+  name      = {Ernest Augustus of Brunswick-Luneburg, Duke of York and Albany},
+  preferred = {Ernest Augustus},
+  parents   = {sophia-hanover,ernest-augustus-hanover},
+  lineage-parent = {sophia-hanover},
+  birth     = {1674-09-07},
+  death     = {1728-08-14},
+  index     = {Brunswick-Luneburg!Ernest Augustus, Duke of York and Albany}
+}
+
+% Generation 4: legitimate descendants through Charles I
+\definepersonkv{william-iii}{
+  name      = {William III and II},
+  preferred = {William},
+  parents   = {mary-princess-royal,william-ii-orange},
+  lineage-parent = {mary-princess-royal},
+  birth     = {1650-11-04},
+  death     = {1702-03-08},
+  index     = {William III and II}
+}
+
+\definepersonkv{charles-cambridge-1660}{
+  name      = {Charles Stuart, Duke of Cambridge},
+  preferred = {Charles},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1660-10-22},
+  death     = {1661-05-05},
+  index     = {Stuart!Charles, Duke of Cambridge, 1660--1661}
+}
+
+\definepersonkv{mary-ii}{
+  name      = {Mary II},
+  preferred = {Mary},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1662-04-30},
+  death     = {1694-12-28},
+  index     = {Mary II}
+}
+
+\definepersonkv{james-cambridge}{
+  name      = {James Stuart, Duke of Cambridge},
+  preferred = {James},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1663-07-12},
+  death     = {1667-06-20},
+  index     = {Stuart!James, Duke of Cambridge}
+}
+
+\definepersonkv{anne-great-britain}{
+  name      = {Anne, Queen of Great Britain},
+  preferred = {Anne},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1665-02-06},
+  death     = {1714-08-01},
+  index     = {Anne, Queen of Great Britain}
+}
+
+\definepersonkv{charles-kendal}{
+  name      = {Charles Stuart, Duke of Kendal},
+  preferred = {Charles},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1666-07-04},
+  death     = {1667-05-22},
+  index     = {Stuart!Charles, Duke of Kendal}
+}
+
+\definepersonkv{edgar-cambridge}{
+  name      = {Edgar Stuart, Duke of Cambridge},
+  preferred = {Edgar},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1667-09-14},
+  death     = {1671-06-08},
+  index     = {Stuart!Edgar, Duke of Cambridge}
+}
+
+\definepersonkv{henrietta-stuart-1669}{
+  name      = {Henrietta Stuart},
+  preferred = {Henrietta},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1669-01-13},
+  death     = {1669-11-15},
+  index     = {Stuart!Henrietta, 1669}
+}
+
+\definepersonkv{catherine-stuart-1671}{
+  name      = {Catherine Stuart},
+  preferred = {Catherine},
+  parents   = {james-ii-vii,anne-hyde},
+  lineage-parent = {james-ii-vii},
+  birth     = {1671-02-09},
+  death     = {1671-12-05},
+  index     = {Stuart!Catherine, 1671}
+}
+
+\definepersonkv{catherine-laura}{
+  name      = {Catherine Laura Stuart},
+  preferred = {Catherine Laura},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1675-01-10},
+  death     = {1676-10-03},
+  index     = {Stuart!Catherine Laura}
+}
+
+\definepersonkv{isabella-stuart}{
+  name      = {Isabella Stuart},
+  preferred = {Isabella},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1676-08-28},
+  death     = {1681-03-02},
+  index     = {Stuart!Isabella}
+}
+
+\definepersonkv{charles-cambridge-1677}{
+  name      = {Charles Stuart, Duke of Cambridge},
+  preferred = {Charles},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1677-11-07},
+  death     = {1677-12-12},
+  index     = {Stuart!Charles, Duke of Cambridge, 1677}
+}
+
+\definepersonkv{elizabeth-stuart-1678}{
+  name      = {Elizabeth Stuart},
+  preferred = {Elizabeth},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1678-01-01},
+  index     = {Stuart!Elizabeth, 1678}
+}
+
+\definepersonkv{charlotte-maria}{
+  name      = {Charlotte Maria Stuart},
+  preferred = {Charlotte Maria},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1682-08-16},
+  death     = {1682-10-16},
+  index     = {Stuart!Charlotte Maria}
+}
+
+\definepersonkv{james-francis-edward}{
+  name      = {James Francis Edward Stuart},
+  preferred = {James Francis Edward},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1688-06-10},
+  death     = {1766-01-01},
+  index     = {Stuart!James Francis Edward}
+}
+
+\definepersonkv{louisa-maria-teresa}{
+  name      = {Louisa Maria Teresa Stuart},
+  preferred = {Louisa Maria Teresa},
+  parents   = {james-ii-vii,mary-of-modena},
+  lineage-parent = {james-ii-vii},
+  birth     = {1692-06-28},
+  death     = {1712-04-18},
+  index     = {Stuart!Louisa Maria Teresa}
+}
+
+\definepersonkv{marie-louise-orleans}{
+  name      = {Marie Louise d'Orleans},
+  preferred = {Marie Louise},
+  parents   = {henrietta-anne,philippe-orleans},
+  lineage-parent = {henrietta-anne},
+  birth     = {1662-03-26},
+  death     = {1689-02-12},
+  index     = {Orleans!Marie Louise}
+}
+
+\definepersonkv{philippe-charles-orleans}{
+  name      = {Philippe Charles d'Orleans, Duke of Valois},
+  preferred = {Philippe Charles},
+  parents   = {henrietta-anne,philippe-orleans},
+  lineage-parent = {henrietta-anne},
+  birth     = {1664-07-16},
+  death     = {1666-12-08},
+  index     = {Orleans!Philippe Charles, Duke of Valois}
+}
+
+\definepersonkv{anne-marie-orleans}{
+  name      = {Anne Marie d'Orleans},
+  preferred = {Anne Marie},
+  parents   = {henrietta-anne,philippe-orleans},
+  lineage-parent = {henrietta-anne},
+  birth     = {1669-08-27},
+  death     = {1728-08-26},
+  index     = {Orleans!Anne Marie}
+}
+
+\begin{document}
+\maketitle
+
+\begin{registersection}
+\section{First Generation}
+
+\mainperson{james-vi-i} was born at \getpersonbirthplace{james-vi-i} on \getpersonbirthdate{james-vi-i}. He married \getpersonname{anne-denmark}.
+
+The children of James and Anne were:
+\begin{childrenof}{james-vi-i}{anne-denmark}
+  \child{henry-frederick}{Prince of Wales; died unmarried.}
+  \child{elizabeth-stuart}{Queen of Bohemia; married \getpersonname{frederick-v}.}
+  \child{margaret-stuart}{Died in childhood.}
+  \child{charles-i}{King of England, Scotland, and Ireland; married \getpersonname{henrietta-maria}.}
+  \child{robert-kintyre}{Duke of Kintyre; died in infancy.}
+  \child{mary-stuart-1605}{Died in childhood.}
+  \child{sophia-stuart}{Died in infancy.}
+\end{childrenof}
+
+\section{Second Generation}
+
+\mainperson{elizabeth-stuart} married \getpersonname{frederick-v}. Their children were:
+\begin{childrenof}{elizabeth-stuart}{frederick-v}
+  \child{frederick-henry-palatinate}{Hereditary Prince of the Palatinate; died without issue.}
+  \child{charles-i-louis}{Elector Palatine; married \getpersonname{charlotte-hesse-kassel}.}
+  \child{elisabeth-palatinate}{Died unmarried.}
+  \child{rupert-palatinate}{Died without legitimate issue.}
+  \child{maurice-palatinate}{Died without issue.}
+  \child{louise-hollandine}{Died without issue.}
+  \child{louis-palatinate}{Died in infancy.}
+  \child{edward-palatinate}{Married \getpersonname{anne-gonzaga}.}
+  \child{henriette-marie-palatinate}{Died without issue.}
+  \child{john-philip-frederick}{Died without issue.}
+  \child{charlotte-palatinate}{Died in childhood.}
+  \child{sophia-hanover}{Married \getpersonname{ernest-augustus-hanover}.}
+  \child{gustavus-adolphus-palatinate}{Died in childhood.}
+\end{childrenof}
+
+\mainperson{charles-i} married \getpersonname{henrietta-maria}. Their children were:
+\begin{childrenof}{charles-i}{henrietta-maria}
+  \child{charles-james-stuart}{Born and died the same day.}
+  \child{charles-ii}{King of England, Scotland, and Ireland; died without legitimate issue.}
+  \child{mary-princess-royal}{Married \getpersonname{william-ii-orange}.}
+  \child{james-ii-vii}{King of England, Scotland, and Ireland; married, first, \getpersonname{anne-hyde}, and, second, \getpersonname{mary-of-modena}.}
+  \child{elizabeth-stuart-1635}{Died unmarried.}
+  \child{anne-stuart-1637}{Died in childhood.}
+  \child{catherine-stuart}{Born and died the same day.}
+  \child{henry-gloucester}{Died without issue.}
+  \child{henrietta-anne}{Married \getpersonname{philippe-orleans}.}
+\end{childrenof}
+
+\section{Third Generation}
+
+\mainperson{charles-i-louis} married \getpersonname{charlotte-hesse-kassel}. Their children, within the scope of this example, were:
+\begin{childrenof}{charles-i-louis}{charlotte-hesse-kassel}
+  \child{charles-ii-palatine}{Elector Palatine.}
+  \child{elizabeth-charlotte-palatinate}{Duchess of Orleans.}
+  \child{friedrich-palatinate-1653}{Died in infancy.}
+\end{childrenof}
+
+\mainperson{edward-palatinate} married \getpersonname{anne-gonzaga}. Their children were:
+\begin{childrenof}{edward-palatinate}{anne-gonzaga}
+  \child{luise-marie-palatinate}{Married Charles Theodore, Prince of Salm.}
+  \child{anne-henriette-palatinate}{Married Henri Jules, Prince of Conde.}
+  \child{benedicta-henrietta}{Married John Frederick, Duke of Brunswick-Luneburg.}
+\end{childrenof}
+
+\mainperson{sophia-hanover} married \getpersonname{ernest-augustus-hanover}. Their children who survived childbirth were:
+\begin{childrenof}{sophia-hanover}{ernest-augustus-hanover}
+  \child{george-i}{King of Great Britain and Ireland.}
+  \child{frederick-augustus-hanover}{Died unmarried.}
+  \child{maximilian-william-hanover}{Died unmarried.}
+  \child{sophia-charlotte-prussia}{Queen in Prussia.}
+  \child{charles-philip-hanover}{Died unmarried.}
+  \child{christian-henry-hanover}{Died unmarried.}
+  \child{ernest-augustus-york}{Duke of York and Albany.}
+\end{childrenof}
+
+\mainperson{mary-princess-royal} married \getpersonname{william-ii-orange}. Their child was:
+\begin{childrenof}{mary-princess-royal}{william-ii-orange}
+  \child{william-iii}{King of England, Scotland, and Ireland.}
+\end{childrenof}
+
+\mainperson{james-ii-vii} married, first, \getpersonname{anne-hyde}. Their children were:
+\begin{childrenof}{james-ii-vii}{anne-hyde}
+  \child{charles-cambridge-1660}{Died in infancy.}
+  \child{mary-ii}{Queen of England, Scotland, and Ireland.}
+  \child{james-cambridge}{Died in childhood.}
+  \child{anne-great-britain}{Queen of Great Britain.}
+  \child{charles-kendal}{Died in infancy.}
+  \child{edgar-cambridge}{Died in childhood.}
+  \child{henrietta-stuart-1669}{Died in infancy.}
+  \child{catherine-stuart-1671}{Died in infancy.}
+\end{childrenof}
+
+James married, second, \getpersonname{mary-of-modena}. Their children within the scope of this example were:
+\begin{childrenof}{james-ii-vii}{mary-of-modena}
+  \child{catherine-laura}{Died in infancy.}
+  \child{isabella-stuart}{Died in childhood.}
+  \child{charles-cambridge-1677}{Died in infancy.}
+  \child{elizabeth-stuart-1678}{Died in infancy.}
+  \child{charlotte-maria}{Died in infancy.}
+  \child{james-francis-edward}{Known to Jacobites as James III and VIII.}
+  \child{louisa-maria-teresa}{Died unmarried.}
+\end{childrenof}
+
+\mainperson{henrietta-anne} married \getpersonname{philippe-orleans}. Their children within the scope of this example were:
+\begin{childrenof}{henrietta-anne}{philippe-orleans}
+  \child{marie-louise-orleans}{Queen consort of Spain.}
+  \child{philippe-charles-orleans}{Duke of Valois; died in childhood.}
+  \child{anne-marie-orleans}{Duchess of Savoy.}
+\end{childrenof}
+
+\section{Fourth Generation}
+
+\mainperson{mary-ii} reigned jointly with \getpersonname{william-iii}.
+
+\mainperson{anne-great-britain} was the first sovereign of Great Britain.
+
+\mainperson{george-i} succeeded to the British throne under the Hanoverian succession.
+
+\end{registersection}
+
+\checkregister
+\printindex
+\end{document}
