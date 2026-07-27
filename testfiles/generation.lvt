@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{gen1}{
+  name    = {Generation One},
+  parents = {}
+}
+
+\definepersonkv{gen2}{
+  name    = {Generation Two},
+  parents = {gen1}
+}
+
+\definepersonkv{gen3}{
+  name    = {Generation Three},
+  parents = {gen2}
+}
+
+\definepersonkv{gen4}{
+  name    = {Generation Four},
+  parents = {gen3}
+}
+
+\START
+\begin{document}
+
+Gen 1: \getgeneration{gen1}.
+
+Gen 2: \getgeneration{gen2}.
+
+Gen 3: \getgeneration{gen3}.
+
+Gen 4: \getgeneration{gen4}.
+
+\generationheading{gen1}
+
+\generationheading{gen3}
+
+\end{document}
+\END

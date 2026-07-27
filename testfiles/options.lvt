@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents,noindex]{registerstyle}
+
+\definepersonkv{grandparent}{
+  name      = {Grandparent Person},
+  preferred = {Grandparent},
+  parents   = {}
+}
+
+\definepersonkv{parent-opt}{
+  name      = {Parent Person},
+  preferred = {Parent},
+  parents   = {grandparent}
+}
+
+\definepersonkv{child-opt}{
+  name      = {Child Person},
+  preferred = {Child},
+  parents   = {parent-opt},
+  lineage-parent = {parent-opt},
+  occupation = {blacksmith}
+}
+
+\START
+\begin{document}
+
+\begin{registersection}
+\mainperson{grandparent} test.
+
+\mainperson{parent-opt} test.
+
+\mainperson{child-opt} test.
+
+Occupation: \getpersonoccupation{child-opt}.
+
+Shorthand: \born{1900}, \died{1950}, \married{1925},
+\baptized{1900}, \buried{1950}.
+
+\place{Boston} and \dated{1900}.
+\end{registersection}
+
+\end{document}
+\END

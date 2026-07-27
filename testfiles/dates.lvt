@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{date-test}{
+  name        = {Date Test Person},
+  parents     = {},
+  birth       = {1985-12-17},
+  birth-place = {New York, New York},
+  death       = {2060-03-01},
+  death-place = {Los Angeles, California},
+  baptism     = {1986-01-15},
+  baptism-place = {St. Patrick's Cathedral, New York},
+  burial      = {2060-03-05},
+  burial-place  = {Forest Lawn, California}
+}
+
+\START
+\begin{document}
+
+Birth date: \getpersonbirthdate{date-test}.
+
+Birth place: \getpersonbirthplace{date-test}.
+
+Death date: \getpersondeathdate{date-test}.
+
+Death place: \getpersondeathplace{date-test}.
+
+Baptism date: \getpersonbaptismdate{date-test}.
+
+Baptism place: \getpersonbaptismplace{date-test}.
+
+Burial date: \getpersonburialdate{date-test}.
+
+Burial place: \getpersonburialplace{date-test}.
+
+Approximate: \circa{1800}, \before{1850}, \after{1900},
+\between{1800}{1850}, \aboutdate{1750}, \probably{1820},
+\say{1700}.
+
+Formatted: \registerdate{2026-07-27}.
+
+\end{document}
+\END

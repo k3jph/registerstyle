@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[noindex]{registerstyle}
+
+% Person with bad date format
+\definepersonkv{bad-date}{
+  name    = {Bad Date Person},
+  parents = {},
+  birth   = {17 Dec 1985}
+}
+
+% Person with place but no date
+\definepersonkv{place-no-date}{
+  name        = {Place No Date},
+  parents     = {},
+  birth-place = {Somewhere, USA}
+}
+
+% Person with undefined parent
+\definepersonkv{orphan}{
+  name    = {Orphan Person},
+  parents = {nonexistent-parent}
+}
+
+% Person with empty name
+\definepersonkv{no-name}{
+  name    = {},
+  parents = {}
+}
+
+\START
+\begin{document}
+
+\checkregister
+
+\end{document}
+\END

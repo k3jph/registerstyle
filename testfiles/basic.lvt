@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{test-person}{
+  name      = {Test Person},
+  preferred = {Test},
+  parents   = {},
+  sex       = {M},
+  birth     = {1900-01-01}
+}
+
+\START
+\begin{document}
+
+\begin{registersection}
+\mainperson{test-person} was born \getpersonbirthdate{test-person}.
+\end{registersection}
+
+\end{document}
+\END

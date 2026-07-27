@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{husband}{
+  name    = {John Husband},
+  parents = {},
+  sex     = {M}
+}
+
+\definepersonkv{wife-one}{
+  name    = {First Wife},
+  parents = {},
+  sex     = {F}
+}
+
+\definepersonkv{wife-two}{
+  name    = {Second Wife},
+  parents = {},
+  sex     = {F}
+}
+
+% Inline marriage via definepersonkv keys
+\definepersonkv{inline-test}{
+  name           = {Inline Test},
+  parents        = {},
+  marriage-date  = {1900-05-01},
+  marriage-place = {Boston, Massachusetts}
+}
+
+% Multiple marriages via \addmarriage
+\addmarriage{husband}{
+  spouse = wife-one,
+  date   = 1850-06-15,
+  place  = {Hartford, Connecticut}
+}
+
+\addmarriage{husband}{
+  spouse = wife-two,
+  date   = 1865-09-20,
+  place  = {New Haven, Connecticut}
+}
+
+\START
+\begin{document}
+
+Marriage count for husband: \getmarriagecount{husband}.
+
+First marriage date: \getmarriagedate{husband}{1}.
+
+First marriage place: \getmarriageplace{husband}{1}.
+
+First marriage spouse: \getmarriagespouse{husband}{1}.
+
+Second marriage date: \getmarriagedate{husband}{2}.
+
+Second marriage place: \getmarriageplace{husband}{2}.
+
+Second marriage spouse: \getmarriagespouse{husband}{2}.
+
+Inline marriage date: \getmarriagedate{inline-test}{1}.
+
+Inline marriage place: \getmarriageplace{inline-test}{1}.
+
+\end{document}
+\END
