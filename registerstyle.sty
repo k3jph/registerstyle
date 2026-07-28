@@ -1,23 +1,40 @@
-%% registerstyle.sty --- Lineage Genealogical Register Style
-%% Version 1.22  (2026-05-25)
+%% registerstyle.sty --- NEHGS-style genealogical register
+%% Copyright 2026 James P. Howard, II <jh@jameshoward.us>
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   https://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2008-05-04 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% The Current Maintainer of this work is James P. Howard, II.
 
-\ProvidesPackage{registerstyle}[2026/05/25 v1.22 Lineage genealogical register style]
+\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+\ProvidesPackage{registerstyle}[2026/07/27 v1.0 NEHGS-style genealogical register]
 
+%% ---- Package options ------------------------------------------------
 
 \newif\ifr@index
 \r@indextrue
 \newif\ifr@option@abbrevparents
 \r@option@abbrevparentsfalse
+\newif\ifr@option@ngsq
+\r@option@ngsqfalse
 \newcommand{\r@datestyle}{}
 \newcommand{\r@optionkey}{}
 \newcommand{\r@optionvalue}{}
 \newcommand{\r@datestylekey}{datestyle}
 \newcommand{\r@datekey}{date}
+\newcommand{\r@numberingkey}{numbering}
 \newcommand{\r@splitoption}{}
 \def\r@splitoption#1=#2\@nil{%
   \renewcommand{\r@optionkey}{#1}%
   \renewcommand{\r@optionvalue}{#2}%
 }
+\newcommand{\r@ngsqvalue}{ngsq}
 \newcommand{\r@handleunknownoption}{%
   \@expandtwoargs\in@{=}{\CurrentOption}%
   \ifin@
@@ -28,7 +45,15 @@
       \ifx\r@optionkey\r@datekey
         \renewcommand{\r@datestyle}{\r@optionvalue}%
       \else
-        \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+        \ifx\r@optionkey\r@numberingkey
+          \ifx\r@optionvalue\r@ngsqvalue
+            \r@option@ngsqtrue
+          \else
+            \PackageWarning{registerstyle}{Unknown numbering style `\r@optionvalue'}%
+          \fi
+        \else
+          \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+        \fi
       \fi
     \fi
   \else
@@ -40,8 +65,11 @@
 \DeclareOption{noindex}{\r@indexfalse}
 \DeclareOption{fullparents}{\r@option@abbrevparentsfalse}
 \DeclareOption{abbrevparents}{\r@option@abbrevparentstrue}
+\DeclareOption{ngsq}{\r@option@ngsqtrue}
 \DeclareOption*{\r@handleunknownoption}
 \ProcessOptions\relax
+
+%% ---- Required packages ----------------------------------------------
 
 \RequirePackage{xparse}
 \RequirePackage{enumitem}
@@ -58,7 +86,8 @@
 
 \makeatletter
 
-\newcommand{\r@use}[1]{\ifcsdef{#1}{\csuse{#1}}{}}
+%% ---- Internal helpers -----------------------------------------------
+
 \newcommand{\r@trimid}[1]{\zap@space#1 \@empty}
 \newcommand{\r@warn}[1]{\PackageWarning{registerstyle}{#1}}
 \newcommand{\r@indexperson}[1]{\ifr@index\index{#1}\fi}
@@ -72,6 +101,8 @@
     \edef#1{#1,#2}%
   \fi
 }
+
+%% ---- Person registry ------------------------------------------------
 
 \newcommand{\r@personlist}{}
 \newcommand{\r@rememberperson}[1]{%
@@ -110,6 +141,12 @@
     \csgdef{r@birthplace@\r@id}{}%
     \csgdef{r@death@\r@id}{}%
     \csgdef{r@deathplace@\r@id}{}%
+    \csgdef{r@baptism@\r@id}{}%
+    \csgdef{r@baptismplace@\r@id}{}%
+    \csgdef{r@burial@\r@id}{}%
+    \csgdef{r@burialplace@\r@id}{}%
+    \csgdef{r@occupation@\r@id}{}%
+    \csgdef{r@marriagecount@\r@id}{0}%
     \csundef{r@generation@\r@id}%
     \csundef{r@generation@working@\r@id}%
   \fi
@@ -123,6 +160,8 @@
   }%
 }
 
+%% ---- Key-value person fields ----------------------------------------
+
 \define@key{r@person}{name}{\def\r@kv@name{#1}}
 \define@key{r@person}{preferred}{\def\r@kv@preferred{#1}}
 \define@key{r@person}{parents}{\def\r@kv@parents{#1}}
@@ -133,6 +172,13 @@
 \define@key{r@person}{birth-place}{\def\r@kv@birthplace{#1}}
 \define@key{r@person}{death}{\def\r@kv@death{#1}}
 \define@key{r@person}{death-place}{\def\r@kv@deathplace{#1}}
+\define@key{r@person}{baptism}{\def\r@kv@baptism{#1}}
+\define@key{r@person}{baptism-place}{\def\r@kv@baptismplace{#1}}
+\define@key{r@person}{burial}{\def\r@kv@burial{#1}}
+\define@key{r@person}{burial-place}{\def\r@kv@burialplace{#1}}
+\define@key{r@person}{occupation}{\def\r@kv@occupation{#1}}
+\define@key{r@person}{marriage-date}{\def\r@kv@marriagedate{#1}}
+\define@key{r@person}{marriage-place}{\def\r@kv@marriageplace{#1}}
 
 \NewDocumentCommand{\definepersonkv}{mm}{%
   \def\r@kv@name{}%
@@ -145,6 +191,13 @@
   \def\r@kv@birthplace{}%
   \def\r@kv@death{}%
   \def\r@kv@deathplace{}%
+  \def\r@kv@baptism{}%
+  \def\r@kv@baptismplace{}%
+  \def\r@kv@burial{}%
+  \def\r@kv@burialplace{}%
+  \def\r@kv@occupation{}%
+  \def\r@kv@marriagedate{}%
+  \def\r@kv@marriageplace{}%
   \setkeys{r@person}{#2}%
   \edef\r@id{\r@trimid{#1}}%
   \ifx\r@id\@empty
@@ -168,10 +221,107 @@
     \expandafter\global\expandafter\let\csname r@birthplace@\r@id\endcsname\r@kv@birthplace
     \expandafter\global\expandafter\let\csname r@death@\r@id\endcsname\r@kv@death
     \expandafter\global\expandafter\let\csname r@deathplace@\r@id\endcsname\r@kv@deathplace
+    \expandafter\global\expandafter\let\csname r@baptism@\r@id\endcsname\r@kv@baptism
+    \expandafter\global\expandafter\let\csname r@baptismplace@\r@id\endcsname\r@kv@baptismplace
+    \expandafter\global\expandafter\let\csname r@burial@\r@id\endcsname\r@kv@burial
+    \expandafter\global\expandafter\let\csname r@burialplace@\r@id\endcsname\r@kv@burialplace
+    \expandafter\global\expandafter\let\csname r@occupation@\r@id\endcsname\r@kv@occupation
+    \csgdef{r@marriagecount@\r@id}{0}%
+    % If inline marriage keys given, store as marriage 1
+    \ifx\r@kv@marriagedate\@empty\else
+      \csgdef{r@marriagecount@\r@id}{1}%
+      \expandafter\global\expandafter\let\csname r@marriagedate@\r@id @1\endcsname\r@kv@marriagedate
+      \csgdef{r@marriageplace@\r@id @1}{}%
+    \fi
+    \ifx\r@kv@marriageplace\@empty\else
+      \ifcsdef{r@marriagedate@\r@id @1}{%
+        \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @1\endcsname\r@kv@marriageplace
+      }{%
+        \csgdef{r@marriagecount@\r@id}{1}%
+        \csgdef{r@marriagedate@\r@id @1}{}%
+        \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @1\endcsname\r@kv@marriageplace
+      }%
+    \fi
     \csundef{r@generation@\r@id}%
     \csundef{r@generation@working@\r@id}%
   \fi
 }
+
+%% ---- Multiple marriage support --------------------------------------
+
+\define@key{r@marriage}{date}{\def\r@mkv@date{#1}}
+\define@key{r@marriage}{place}{\def\r@mkv@place{#1}}
+\define@key{r@marriage}{spouse}{\def\r@mkv@spouse{#1}}
+
+\NewDocumentCommand{\addmarriage}{mm}{%
+  \def\r@mkv@date{}%
+  \def\r@mkv@place{}%
+  \def\r@mkv@spouse{}%
+  \setkeys{r@marriage}{#2}%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifx\r@id\@empty
+    \r@warn{Cannot add marriage to empty person id}%
+  \else
+    \ifcsdef{r@name@\r@id}{%
+      \edef\r@mcnt{\csuse{r@marriagecount@\r@id}}%
+      \edef\r@newmcnt{\the\numexpr\r@mcnt+1\relax}%
+      \csgdef{r@marriagecount@\r@id}{\r@newmcnt}%
+      \expandafter\global\expandafter\let\csname r@marriagedate@\r@id @\r@newmcnt\endcsname\r@mkv@date
+      \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @\r@newmcnt\endcsname\r@mkv@place
+      \expandafter\global\expandafter\let\csname r@marriagespouse@\r@id @\r@newmcnt\endcsname\r@mkv@spouse
+    }{%
+      \r@warn{Cannot add marriage to undefined person `\r@id'}%
+    }%
+  \fi
+}
+
+\newcommand{\getmarriagecount}[1]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagecount@\r@id}{\csuse{r@marriagecount@\r@id}}{0}%
+}
+
+\newcommand{\getmarriagedate}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagedate@\r@id @#2}{%
+    \ifcsempty{r@marriagedate@\r@id @#2}{%
+      \r@warn{No date stored for marriage #2 of `\r@id'}%
+      \textbf{[marriage date unknown]}%
+    }{%
+      \edef\r@mdate{\csuse{r@marriagedate@\r@id @#2}}%
+      \expandafter\registerdate\expandafter{\r@mdate}%
+    }%
+  }{%
+    \r@warn{No marriage #2 for `\r@id'}%
+    \textbf{[no marriage #2]}%
+  }%
+}
+
+\newcommand{\getmarriageplace}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriageplace@\r@id @#2}{%
+    \ifcsempty{r@marriageplace@\r@id @#2}{%
+      \r@warn{No place stored for marriage #2 of `\r@id'}%
+      \textbf{[marriage place unknown]}%
+    }{%
+      \csuse{r@marriageplace@\r@id @#2}%
+    }%
+  }{%
+    \r@warn{No marriage #2 for `\r@id'}%
+    \textbf{[no marriage #2]}%
+  }%
+}
+
+\newcommand{\getmarriagespouse}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagespouse@\r@id @#2}{%
+    \ifcsempty{r@marriagespouse@\r@id @#2}{}{%
+      \edef\r@spid{\csuse{r@marriagespouse@\r@id @#2}}%
+      \getpersonname{\r@spid}%
+    }%
+  }{}%
+}
+
+%% ---- Name retrieval -------------------------------------------------
 
 \newcommand{\getpersonname}[1]{%
   \edef\r@id{\r@trimid{#1}}%
@@ -217,73 +367,106 @@
 
 \newcommand{\shortname}[1]{\getpersonpreferred{#1}}
 
-\newcommand{\getpersonbirthdate}[1]{%
+%% ---- Vital record accessors -----------------------------------------
+
+\newcommand{\r@getvitaldate}[3]{% #1 = id, #2 = field suffix, #3 = label
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@birth@\r@id}{%
-    \ifcsempty{r@birth@\r@id}{%
-      \r@warn{No birth date stored for `\r@id'}%
-      \textbf{[birth date unknown for \r@id]}%
+  \ifcsdef{r@#2@\r@id}{%
+    \ifcsempty{r@#2@\r@id}{%
+      \r@warn{No #3 date stored for `\r@id'}%
+      \textbf{[#3 date unknown for \r@id]}%
     }{%
-      \edef\r@birthdate{\csuse{r@birth@\r@id}}%
-      \expandafter\registerdate\expandafter{\r@birthdate}%
+      \edef\r@thedate{\csuse{r@#2@\r@id}}%
+      \expandafter\registerdate\expandafter{\r@thedate}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving birth date}%
+    \r@warn{Undefined person `\r@id' while retrieving #3 date}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-\newcommand{\getpersonbirthplace}[1]{%
+\newcommand{\r@getvitalplace}[3]{% #1 = id, #2 = field suffix, #3 = label
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@birthplace@\r@id}{%
-    \ifcsempty{r@birthplace@\r@id}{%
-      \r@warn{No birth place stored for `\r@id'}%
-      \textbf{[birth place unknown for \r@id]}%
+  \ifcsdef{r@#2@\r@id}{%
+    \ifcsempty{r@#2@\r@id}{%
+      \r@warn{No #3 place stored for `\r@id'}%
+      \textbf{[#3 place unknown for \r@id]}%
     }{%
-      \csuse{r@birthplace@\r@id}%
+      \csuse{r@#2@\r@id}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving birth place}%
+    \r@warn{Undefined person `\r@id' while retrieving #3 place}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-\newcommand{\getpersondeathdate}[1]{%
+\newcommand{\getpersonbirthdate}[1]{\r@getvitaldate{#1}{birth}{birth}}
+\newcommand{\getpersonbirthplace}[1]{\r@getvitalplace{#1}{birthplace}{birth}}
+\newcommand{\getpersondeathdate}[1]{\r@getvitaldate{#1}{death}{death}}
+\newcommand{\getpersondeathplace}[1]{\r@getvitalplace{#1}{deathplace}{death}}
+\newcommand{\getpersonbaptismdate}[1]{\r@getvitaldate{#1}{baptism}{baptism}}
+\newcommand{\getpersonbaptismplace}[1]{\r@getvitalplace{#1}{baptismplace}{baptism}}
+\newcommand{\getpersonburialdate}[1]{\r@getvitaldate{#1}{burial}{burial}}
+\newcommand{\getpersonburialplace}[1]{\r@getvitalplace{#1}{burialplace}{burial}}
+
+\newcommand{\getpersonoccupation}[1]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@death@\r@id}{%
-    \ifcsempty{r@death@\r@id}{%
-      \r@warn{No death date stored for `\r@id'}%
-      \textbf{[death date unknown for \r@id]}%
+  \ifcsdef{r@occupation@\r@id}{%
+    \ifcsempty{r@occupation@\r@id}{%
+      \r@warn{No occupation stored for `\r@id'}%
+      \textbf{[occupation unknown for \r@id]}%
     }{%
-      \edef\r@deathdate{\csuse{r@death@\r@id}}%
-      \expandafter\registerdate\expandafter{\r@deathdate}%
+      \csuse{r@occupation@\r@id}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving death date}%
+    \r@warn{Undefined person `\r@id' while retrieving occupation}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-\newcommand{\getpersondeathplace}[1]{%
+\newcommand{\getpersonsex}[1]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@deathplace@\r@id}{%
-    \ifcsempty{r@deathplace@\r@id}{%
-      \r@warn{No death place stored for `\r@id'}%
-      \textbf{[death place unknown for \r@id]}%
-    }{%
-      \csuse{r@deathplace@\r@id}%
-    }%
-  }{%
-    \r@warn{Undefined person `\r@id' while retrieving death place}%
-    \textbf{[undefined \r@id]}%
-  }%
+  \ifcsdef{r@sex@\r@id}{\csuse{r@sex@\r@id}}{}%
 }
+
+%% ---- Gender-aware pronoun helpers -----------------------------------
+
+\newcommand{\r@pronoun}[4]{% #1 = person id, #2 = M form, #3 = F form, #4 = neutral form
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@sex@\r@id}{%
+    \edef\r@thesex{\csuse{r@sex@\r@id}}%
+    \def\r@male{M}\def\r@female{F}%
+    \ifx\r@thesex\r@male #2%
+    \else\ifx\r@thesex\r@female #3%
+    \else #4%
+    \fi\fi
+  }{#4}%
+}
+
+\newcommand{\heshethey}[1]{\r@pronoun{#1}{he}{she}{they}}
+\newcommand{\himherthem}[1]{\r@pronoun{#1}{him}{her}{them}}
+\newcommand{\hishertheirargs}[1]{\r@pronoun{#1}{his}{her}{their}}
+\newcommand{\HeSheThey}[1]{\r@pronoun{#1}{He}{She}{They}}
+\newcommand{\HimHerThem}[1]{\r@pronoun{#1}{Him}{Her}{Them}}
+\newcommand{\HisHerTheir}[1]{\r@pronoun{#1}{His}{Her}{Their}}
+\newcommand{\himselfherselfthemself}[1]{\r@pronoun{#1}{himself}{herself}{themself}}
+
+%% ---- Approximate date qualifiers ------------------------------------
+
+\newcommand{\circa}[1]{c.\,#1}
+\newcommand{\before}[1]{bef.\ #1}
+\newcommand{\after}[1]{aft.\ #1}
+\newcommand{\between}[2]{bet.\ #1 and #2}
+\newcommand{\aboutdate}[1]{abt.\ #1}
+\newcommand{\probably}[1]{prob.\ #1}
+\newcommand{\say}[1]{say #1}
+
+%% ---- Generation computation -----------------------------------------
 
 \newcommand{\r@computegeneration}[1]{%
   \begingroup
     \edef\r@target{\r@trimid{#1}}%
     \ifcsdef{r@generation@\r@target}{%
-      % already cached
     }{%
       \ifcsdef{r@generation@working@\r@target}{%
         \r@warn{Cycle detected while computing generation for `\r@target'}%
@@ -334,21 +517,12 @@
   \r@generationresult
 }
 
+%% ---- Ancestor chain formatting --------------------------------------
 
-\newcommand{\registerpersonsep}{1em}
-\newif\ifregister@afterheading
-\register@afterheadingfalse
-
-\pretocmd{\section}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subsection}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subsubsection}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\paragraph}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subparagraph}{\global\register@afterheadingtrue}{}{}
-
-\newcommand{\r@alist}{} % scratch list
+\newcommand{\r@alist}{}
 \newif\ifr@ancestorchain@lineage
 
-\newcommand{\collectancestors}[1]{%
+\newcommand{\r@collectancestors}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@ancestor@seen@\r@id}{%
     \r@warn{Cycle detected while collecting ancestors for `\r@id'}%
@@ -359,17 +533,17 @@
         \ifcsempty{r@lineageparent@\r@id}{%
           \edef\r@plist{\csuse{r@parents@\r@id}}%
           \ifx\r@plist\@empty\else
-            \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+            \expandafter\forcsvlist\expandafter\r@addoneancestor\expandafter{\r@plist}%
           \fi
         }{%
           \r@ancestorchain@lineagetrue
           \edef\r@lineagepid{\csuse{r@lineageparent@\r@id}}%
-          \expandafter\addoneancestor\expandafter{\r@lineagepid}%
+          \expandafter\r@addoneancestor\expandafter{\r@lineagepid}%
         }%
       }{%
         \edef\r@plist{\csuse{r@parents@\r@id}}%
         \ifx\r@plist\@empty\else
-          \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+          \expandafter\forcsvlist\expandafter\r@addoneancestor\expandafter{\r@plist}%
         \fi
       }%
     }{%
@@ -377,14 +551,14 @@
     }%
   }%
 }
-\newcommand{\addoneancestor}[1]{%
+\newcommand{\r@addoneancestor}[1]{%
   \edef\r@pid{\r@trimid{#1}}%
   \ifx\r@pid\@empty
     \r@warn{Empty parent id in ancestor chain}%
   \else
     \ifcsdef{r@parents@\r@pid}{%
       \r@csvadd{\r@alist}{\r@pid}%
-      \collectancestors{\r@pid}%
+      \r@collectancestors{\r@pid}%
     }{%
       \r@warn{Undefined parent `\r@pid' in ancestor chain}%
       \r@csvadd{\r@alist}{\r@pid}%
@@ -392,11 +566,11 @@
   \fi
 }
 
-\newif\ifabbrevparents
+\newif\ifr@abbrevparents
 \ifr@option@abbrevparents
-  \abbrevparentstrue
+  \r@abbrevparentstrue
 \else
-  \abbrevparentsfalse
+  \r@abbrevparentsfalse
 \fi
 
 \newcount\r@pcnt
@@ -413,10 +587,9 @@
   \begingroup
     \def\r@alist{}%
     \r@ancestorchain@lineagefalse
-    \collectancestors{#1}%
+    \r@collectancestors{#1}%
     \edef\r@plist{\r@alist}%
     \ifx\r@plist\@empty
-      % nothing
     \else
       \r@pcnt=0\relax
       \def\r@countone##1{\advance\r@pcnt by 1\relax}%
@@ -437,7 +610,7 @@
               \fi
             \fi
           \fi
-          \ifabbrevparents
+          \ifr@abbrevparents
             \r@abbrevnamegensNI{\r@pid}%
           \else
             \r@namegensNI{\r@pid}%
@@ -449,23 +622,44 @@
   \endgroup
 }
 
+%% ---- Main register entries ------------------------------------------
+
+\newcommand{\registerpersonsep}{1em}
+\newif\ifr@afterheading
+\r@afterheadingfalse
+
+\pretocmd{\section}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subsection}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subsubsection}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\paragraph}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subparagraph}{\global\r@afterheadingtrue}{}{}
+
 \newcounter{registerperson}
 
 \NewDocumentCommand{\mainperson}{m}{%
   \edef\r@id{\r@trimid{#1}}%
   \par
-  \ifregister@afterheading
-    \global\register@afterheadingfalse
+  \ifr@afterheading
+    \global\r@afterheadingfalse
   \else
     \addvspace{\registerpersonsep}%
   \fi
   \refstepcounter{registerperson}%
+  \csgdef{r@mainentry@\r@id}{\theregisterperson}%
   \label{person:\r@id}%
   \noindent
   \textbf{\theregisterperson.\ }%
   \getpersonname{\r@id}\textsuperscript{\getgeneration{\r@id}}%
   \formatparents{\r@id}\xspace
 }
+
+%% ---- NGSQ (Modified Register) numbering ----------------------------
+
+\ifr@option@ngsq
+  \renewcommand{\theregisterperson}{\arabic{registerperson}}
+\fi
+
+%% ---- Cross-references -----------------------------------------------
 
 \NewDocumentCommand{\xrefperson}{m}{%
   \edef\r@id{\r@trimid{#1}}%
@@ -480,15 +674,12 @@
   \getpersonnameNI{\r@id}\textsuperscript{\getgeneration{\r@id}}%
 }
 
+%% ---- Child lists ----------------------------------------------------
 
 \newif\ifr@childrenof
 \r@childrenoffalse
 \newcommand{\r@childrenof@a}{}
 \newcommand{\r@childrenof@b}{}
-
-\newenvironment{kidslist}{
-  \begin{enumerate}[label=\roman*., leftmargin=2em, itemsep=0pt, topsep=0pt]
-}{\end{enumerate}}
 
 \NewDocumentEnvironment{children}{ O{} }{%
   \begin{enumerate}[label=\roman*., leftmargin=2em, itemsep=0pt, topsep=0pt,#1]%
@@ -513,10 +704,8 @@
       \edef\r@expectedparents{\r@childrenof@a,\r@childrenof@b}%
       \edef\r@expectedparentsrev{\r@childrenof@b,\r@childrenof@a}%
       \ifx\r@childparents\r@expectedparents
-        % parent pair matches
       \else
         \ifx\r@childparents\r@expectedparentsrev
-          % parent pair matches in reverse order
         \else
           \r@warn{Child `\r@childid' listed under parents `\r@expectedparents' but has parents `\r@childparents'}%
         \fi
@@ -533,6 +722,42 @@
   \IfBlankF{#2}{, #2}%
 }
 
+\NewDocumentCommand{\childref}{m m}{%
+  \r@checkchildparents{#1}%
+  \item \textbf{+}\space\childname{#1}%
+  \IfBlankF{#2}{, #2}%
+}
+
+%% ---- Source/note support --------------------------------------------
+
+\NewDocumentCommand{\registersource}{m}{%
+  \footnote{#1}%
+}
+
+\NewDocumentCommand{\registerendnote}{m}{%
+  \@ifpackageloaded{endnotes}{\endnote{#1}}{\footnote{#1}}%
+}
+
+%% ---- Automatic generation headings ----------------------------------
+
+\newcommand{\r@generationword}[1]{%
+  \ifcase#1 Zeroth\or First\or Second\or Third\or Fourth\or Fifth\or
+    Sixth\or Seventh\or Eighth\or Ninth\or Tenth\or Eleventh\or
+    Twelfth\or Thirteenth\or Fourteenth\or Fifteenth\or Sixteenth\or
+    Seventeenth\or Eighteenth\or Nineteenth\or Twentieth\else
+    #1th\fi
+}
+
+\newcommand{\generationheading}[1]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \r@computegeneration{\r@id}%
+  \edef\r@gen{\csuse{r@generation@\r@id}}%
+  \par\medskip\noindent
+  \textbf{\r@generationword{\r@gen}\space Generation}%
+  \par\nobreak
+}
+
+%% ---- Date formatting ------------------------------------------------
 
 \newcommand{\registerdatestyle}[1]{%
   \DTMsetdatestyle{#1}%
@@ -556,6 +781,7 @@
 \NewDocumentCommand{\registerdate}{m}{\registerstyle_date:n{#1}}
 \ExplSyntaxOff
 
+%% ---- Date validation ------------------------------------------------
 
 \ExplSyntaxOn
 \cs_generate_variant:Nn \regex_match:nnF { neF }
@@ -570,6 +796,8 @@
 \NewDocumentCommand{\r@validateisodate}{m m}
   {\registerstyle_validate_iso_date:nn {#1} {#2}}
 \ExplSyntaxOff
+
+%% ---- Validation commands --------------------------------------------
 
 \newcommand{\r@checkdatefield}[3]{% #1 person id, #2 field label, #3 date macro suffix
   \ifcsdef{r@#3@#1}{%
@@ -618,8 +846,12 @@
         \r@checkparentlist{\r@id}%
         \r@checkdatefield{\r@id}{Birth}{birth}%
         \r@checkdatefield{\r@id}{Death}{death}%
+        \r@checkdatefield{\r@id}{Baptism}{baptism}%
+        \r@checkdatefield{\r@id}{Burial}{burial}%
         \r@checkplacewithoutdate{\r@id}{birthplace}{birth}{birth place}{birth date}%
         \r@checkplacewithoutdate{\r@id}{deathplace}{death}{death place}{death date}%
+        \r@checkplacewithoutdate{\r@id}{baptismplace}{baptism}{baptism place}{baptism date}%
+        \r@checkplacewithoutdate{\r@id}{burialplace}{burial}{burial place}{burial date}%
       }{%
         \r@warn{Cannot check undefined person `\r@id'}%
       }%
@@ -638,11 +870,17 @@
   \endgroup
 }
 
+%% ---- Shorthands -----------------------------------------------------
+
 \newcommand{\born}[1]{b.\ #1}
 \newcommand{\died}[1]{d.\ #1}
 \newcommand{\married}[1]{m.\ #1}
+\newcommand{\baptized}[1]{bp.\ #1}
+\newcommand{\buried}[1]{bur.\ #1}
 \newcommand{\place}[1]{\textit{#1}}
 \newcommand{\dated}[1]{#1}
+
+%% ---- Register section environment -----------------------------------
 
 \NewDocumentEnvironment{registersection}{ O{} }{%
   \begingroup
@@ -654,5 +892,12 @@
   \par\endgroup
 }
 
-\makeatother
+%% ---- Backward compatibility -----------------------------------------
 
+% Old public names kept as aliases for one release cycle
+\let\collectancestors\r@collectancestors
+\let\addoneancestor\r@addoneancestor
+\newif\ifabbrevparents
+\ifr@abbrevparents\abbrevparentstrue\else\abbrevparentsfalse\fi
+
+\makeatother

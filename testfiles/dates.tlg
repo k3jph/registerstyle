@@ -1,0 +1,79 @@
+This is a generated file for the l3build validation system.
+Don't change this file in any respect.
+No file dates.aux.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line ....
+LaTeX Font Info:    ... okay on input line ....
+Package hyperref Info: Link coloring OFF on input line ....
+\@outlinefile=\write...
+============================================================
+TEST 1: Birth date and place storage
+============================================================
+1985-12-17
+New York, New York
+============================================================
+============================================================
+TEST 2: Death date and place storage
+============================================================
+2060-03-01
+Los Angeles, California
+============================================================
+============================================================
+TEST 3: Baptism date and place storage
+============================================================
+1986-01-15
+St. Patrick's Cathedral, New York
+============================================================
+============================================================
+TEST 4: Burial date and place storage
+============================================================
+2060-03-05
+Forest Lawn, California
+============================================================
+============================================================
+TEST 5: Vital record accessor output
+============================================================
+============================================================
+============================================================
+TEST 6: Approximate date qualifiers
+============================================================
+c.\protect \protect \leavevmode@ifvmode \kern +.16667em\relax 1800
+bef.\ 1850
+aft.\ 1900
+bet.\ 1800 and 1850
+abt.\ 1750
+prob.\ 1820
+say 1700
+============================================================
+============================================================
+TEST 7: Formatted date
+============================================================
+============================================================
+============================================================
+TEST 8: Invalid date warning
+============================================================
+Package registerstyle Warning: Date `not-a-date' is not in YYYY-MM-DD form on input line ....
+============================================================
+[1
+] (dates.aux)
+Package rerunfilecheck Warning: File `dates.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+Package rerunfilecheck Info: Checksums for `dates.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.

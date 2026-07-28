@@ -1,0 +1,55 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents,noindex]{registerstyle}
+
+\definepersonkv{grandparent}{
+  name      = {Grandparent Person},
+  preferred = {Grandparent},
+  parents   = {}
+}
+
+\definepersonkv{parent-opt}{
+  name      = {Parent Person},
+  preferred = {Parent},
+  parents   = {grandparent}
+}
+
+\definepersonkv{child-opt}{
+  name      = {Child Person},
+  preferred = {Child},
+  parents   = {parent-opt},
+  lineage-parent = {parent-opt},
+  occupation = {blacksmith}
+}
+
+\START
+\begin{document}
+
+\TEST{Abbreviated parents in ancestor chain}{
+  \begin{registersection}
+  \mainperson{grandparent} test.
+  \mainperson{parent-opt} test.
+  \mainperson{child-opt} test.
+  \end{registersection}
+}
+
+\TEST{Occupation accessor}{
+  \TYPE{\csuse{r@occupation@child-opt}}
+  Occupation: \getpersonoccupation{child-opt}.
+}
+
+\TEST{Shorthand macros}{
+  \TYPE{\born{1900}}
+  \TYPE{\died{1950}}
+  \TYPE{\married{1925}}
+  \TYPE{\baptized{1900}}
+  \TYPE{\buried{1950}}
+}
+
+\TEST{Place and dated shorthands}{
+  \place{Boston} and \dated{1900}.
+}
+
+\end{document}
+\END

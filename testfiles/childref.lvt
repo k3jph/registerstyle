@@ -1,0 +1,49 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{parent}{
+  name    = {The Parent},
+  parents = {}
+}
+
+\definepersonkv{spouse}{
+  name    = {The Spouse},
+  parents = {}
+}
+
+\definepersonkv{continued-child}{
+  name    = {Continued Child},
+  parents = {parent,spouse},
+  lineage-parent = {parent},
+  birth   = {1950-01-01}
+}
+
+\definepersonkv{terminal-child}{
+  name    = {Terminal Child},
+  parents = {parent,spouse},
+  lineage-parent = {parent},
+  birth   = {1952-06-15}
+}
+
+\START
+\begin{document}
+
+\TEST{Childref continuation marker}{
+  \begin{registersection}
+  \mainperson{parent} test entry.
+  \begin{childrenof}{parent}{spouse}
+    \childref{continued-child}{b.~1950. Will appear later.}
+    \child{terminal-child}{b.~1952. Died without issue.}
+  \end{childrenof}
+  \end{registersection}
+}
+
+\TEST{Continued child as main entry}{
+  \begin{registersection}
+  \mainperson{continued-child} continued entry.
+  \end{registersection}
+}
+
+\end{document}
+\END

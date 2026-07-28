@@ -1,0 +1,36 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\defineperson{leg-root}{}{Legacy Root}{Root}
+\defineperson{leg-child}{leg-root}{Legacy Child}{Child}
+\defineperson{leg-indexed}{}{Indexed Person}{Indexed}[Custom Index Entry]
+
+\START
+\begin{document}
+
+\TEST{Legacy positional person definition}{
+  \TYPE{name: \csuse{r@name@leg-root}}
+  \TYPE{preferred: \csuse{r@preferred@leg-root}}
+  \TYPE{parents: \csuse{r@parents@leg-root}}
+}
+
+\TEST{Legacy child with parent}{
+  \TYPE{name: \csuse{r@name@leg-child}}
+  \TYPE{parents: \csuse{r@parents@leg-child}}
+  \TYPE{gen: \getgeneration{leg-child}}
+}
+
+\TEST{Legacy custom index entry}{
+  \TYPE{index: \csuse{r@index@leg-indexed}}
+}
+
+\TEST{Legacy person in register}{
+  \begin{registersection}
+  \mainperson{leg-root} test entry.
+  \mainperson{leg-child} test entry.
+  \end{registersection}
+}
+
+\end{document}
+\END

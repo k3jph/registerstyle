@@ -1,88 +1,498 @@
-% \iffalse
+% \iffalse meta-comment
+%
+% registerstyle.dtx
+% Copyright 2026 James P. Howard, II <jh@jameshoward.us>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3c
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008-05-04 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% The Current Maintainer of this work is James P. Howard, II.
+%
+% This work consists of the file registerstyle.dtx
+% and the derived file          registerstyle.sty.
+%
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{hyperref}
+\usepackage{enumitem}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 \begin{document}
-\DocInput{source/registerstyle.dtx}
+\DocInput{registerstyle.dtx}
 \end{document}
 %</driver>
 % \fi
 %
-% \title{The \textsf{registerstyle} package}
-% \author{Project documentation draft}
-% \date{Version 1.19, 2026-05-25}
+% \changes{v1.0}{2026/07/27}{First public release.}
+%
+% \GetFileInfo{registerstyle.sty}
+%
+% \title{The \textsf{registerstyle} package\thanks{This document
+%   corresponds to \textsf{registerstyle}~v1.0,
+%   dated~2026/07/27.}}
+% \author{James P. Howard, II\\ \texttt{jh@jameshoward.us}}
+% \date{2026/07/27}
 % \maketitle
 %
-% \section{Overview}
+% \begin{abstract}
+% The \textsf{registerstyle} package provides commands and environments
+% for typesetting genealogical registers in the style used by the
+% \emph{New England Historical and Genealogical Register} (NEHGS).
+% It manages a person registry with computed generation numbers,
+% ancestor chains, child lists with continuation markers, multiple
+% marriages, vital records, date formatting, gender-aware pronouns,
+% source citations, index generation, and cross-references.
+% \end{abstract}
 %
-% \textsf{registerstyle} provides a small set of commands for writing
-% genealogical register-style prose.  It supports a person registry,
-% computed generation numbers, parent chains, child lists, structured vital
-% metadata, date formatting through \textsf{datetime2}, and warning-only
-% validation.
+% \tableofcontents
 %
-% This documented source file is an initial packaging scaffold.  The public
-% interface is expected to stabilize before the documentation is expanded.
+% \section{Introduction}
 %
-% \section{Basic use}
+% The Register style, also called the NEHGS style, is the standard
+% format for presenting genealogical data in descending order.
+% Each person who continues the lineage receives a numbered main entry;
+% children are listed under their parents with roman numeral labels.
+% Children who appear later as main entries are marked with a ``+''
+% continuation symbol.
 %
-% A person may be declared with the key-value interface:
+% This package automates the mechanical parts of Register typesetting:
+% numbering, generation computation, ancestor chains, parent
+% validation, and index entries.  The genealogical prose itself
+% remains the author's responsibility.
+%
+% \section{Quick start}
 %
 % \begin{verbatim}
-% \definepersonkv{person-id}{
-%   name        = {Full Name},
-%   preferred   = {Preferred},
-%   parents     = {parent-a,parent-b},
-%   index       = {Surname!Given},
-%   birth       = {1979-12-16},
-%   birth-place = {Dayton, Ohio}
+% \documentclass{article}
+% \usepackage[en-US]{datetime2}
+% \usepackage[date=en-US,abbrevparents]{registerstyle}
+%
+% \definepersonkv{john-doe}{
+%   name        = {John Doe},
+%   preferred   = {John},
+%   parents     = {},
+%   sex         = {M},
+%   birth       = {1820-03-15},
+%   birth-place = {Boston, Massachusetts}
 % }
+%
+% \definepersonkv{mary-smith}{
+%   name        = {Mary Smith},
+%   preferred   = {Mary},
+%   parents     = {},
+%   sex         = {F},
+%   birth       = {1825-06-20}
+% }
+%
+% \definepersonkv{james-doe}{
+%   name        = {James Doe},
+%   preferred   = {James},
+%   parents     = {john-doe,mary-smith},
+%   lineage-parent = {john-doe},
+%   sex         = {M},
+%   birth       = {1850-11-02}
+% }
+%
+% \addmarriage{john-doe}{
+%   spouse = mary-smith,
+%   date   = 1845-09-10,
+%   place  = {Springfield, Massachusetts}
+% }
+%
+% \begin{document}
+% \begin{registersection}
+%
+% \generationheading{john-doe}
+% \mainperson{john-doe} was born
+% \getpersonbirthdate{john-doe} in
+% \getpersonbirthplace{john-doe}.
+% \HeSheThey{john-doe} married
+% \getpersonname{mary-smith} on
+% \getmarriagedate{john-doe}{1} in
+% \getmarriageplace{john-doe}{1}.
+%
+% Children of John Doe and Mary Smith:
+% \begin{childrenof}{john-doe}{mary-smith}
+%   \childref{james-doe}{b.~\getpersonbirthdate{james-doe}.}
+% \end{childrenof}
+%
+% \generationheading{james-doe}
+% \mainperson{james-doe} was born
+% \getpersonbirthdate{james-doe}.
+%
+% \end{registersection}
+% \checkregister
+% \end{document}
 % \end{verbatim}
 %
-% The package intentionally leaves prose to the author.  Registry data can be
-% inserted with commands such as \verb|\getpersonname|,
-% \verb|\getpersonbirthdate|, and \verb|\getpersonbirthplace|.
+% \section{Package options}
 %
-% \StopEventually{\PrintIndex}
+% The package accepts the following options:
+%
+% \begin{description}[style=nextline]
+% \item[\texttt{index} (default)] Load \textsf{imakeidx} and
+%   generate index entries whenever a person's name is printed
+%   by |\getpersonname|.
+% \item[\texttt{noindex}] Suppress all index generation.
+% \item[\texttt{fullparents} (default)] Print full names in
+%   parenthetical ancestor chains.
+% \item[\texttt{abbrevparents}] Print preferred (short) names in
+%   ancestor chains.
+% \item[\texttt{ngsq}] Use NGSQ (Modified Register) numbering.
+% \item[\texttt{datestyle=}\meta{style}] Set the \textsf{datetime2}
+%   date style at |\begin{document}|.  The synonym \texttt{date=}
+%   is also accepted.
+% \item[\texttt{numbering=ngsq}] Equivalent to the \texttt{ngsq}
+%   option.
+% \end{description}
+%
+% \section{Defining persons}
+%
+% \DescribeMacro{\definepersonkv}
+% |\definepersonkv|\marg{id}\marg{key=value pairs}
+%
+% The primary interface for declaring a person in the registry.
+% The \meta{id} is a short identifier (e.g., |john-doe|) used to
+% refer to this person throughout the document.  Available keys:
+%
+% \begin{description}[style=nextline, font=\ttfamily]
+% \item[name] Full name as it should appear in the register.
+% \item[preferred] Short or preferred name for abbreviated contexts.
+% \item[parents] Comma-separated list of parent ids.  Leave empty for
+%   the founding generation.
+% \item[index] Index entry text.  Defaults to the \texttt{name} value.
+% \item[lineage-parent] Single parent id for lineage chain display.
+%   When set, ancestor chains follow only this parent rather than
+%   listing all parents.
+% \item[sex] |M|, |F|, or empty.  Used by pronoun helpers.
+% \item[birth] Birth date in ISO format (|YYYY-MM-DD|).
+% \item[birth-place] Birth place as free text.
+% \item[death] Death date in ISO format.
+% \item[death-place] Death place as free text.
+% \item[baptism] Baptism or christening date in ISO format.
+% \item[baptism-place] Baptism or christening place.
+% \item[burial] Burial date in ISO format.
+% \item[burial-place] Burial place.
+% \item[occupation] Occupation as free text.
+% \item[marriage-date] Date of (first) marriage in ISO format.
+%   For multiple marriages, use |\addmarriage| instead.
+% \item[marriage-place] Place of (first) marriage.
+% \end{description}
+%
+% \DescribeMacro{\defineperson}
+% |\defineperson|\marg{id}\marg{parents}\marg{name}\marg{preferred}%
+% \oarg{index}
+%
+% Legacy positional interface.  Prefer |\definepersonkv| for new work.
+%
+% \section{Marriage support}
+%
+% \DescribeMacro{\addmarriage}
+% |\addmarriage|\marg{person-id}\marg{key=value pairs}
+%
+% Add a marriage record to a previously defined person.  Supports
+% multiple marriages per person.  Available keys:
+%
+% \begin{description}[style=nextline, font=\ttfamily]
+% \item[date] Marriage date in ISO format.
+% \item[place] Marriage place.
+% \item[spouse] Person id of the spouse (must be separately defined).
+% \end{description}
+%
+% Marriages are numbered sequentially starting from~1 in the order
+% they are added.  If \texttt{marriage-date} or \texttt{marriage-place}
+% is given inline in |\definepersonkv|, that counts as marriage~1.
+%
+% \DescribeMacro{\getmarriagedate}
+% |\getmarriagedate|\marg{person-id}\marg{number}
+%
+% Print the date of marriage \meta{number}, formatted through
+% \textsf{datetime2}.
+%
+% \DescribeMacro{\getmarriageplace}
+% |\getmarriageplace|\marg{person-id}\marg{number}
+%
+% Print the place of marriage \meta{number}.
+%
+% \DescribeMacro{\getmarriagespouse}
+% |\getmarriagespouse|\marg{person-id}\marg{number}
+%
+% Print the name of the spouse from marriage \meta{number}
+% (via |\getpersonname|, including index entry).
+%
+% \DescribeMacro{\getmarriagecount}
+% |\getmarriagecount|\marg{person-id}
+%
+% Expand to the number of recorded marriages for the person.
+%
+% \section{Name retrieval}
+%
+% \DescribeMacro{\getpersonname}
+% |\getpersonname|\marg{id} prints the full name in small caps and
+% generates an index entry.
+%
+% \DescribeMacro{\getpersonnameNI}
+% |\getpersonnameNI|\marg{id} prints the full name in small caps
+% without an index entry.
+%
+% \DescribeMacro{\getpersonpreferred}
+% |\getpersonpreferred|\marg{id} prints the preferred (short) name
+% in small caps.
+%
+% \DescribeMacro{\getpersonabbrevNI}
+% |\getpersonabbrevNI|\marg{id} prints the preferred name if set,
+% otherwise the full name, without an index entry.
+%
+% \DescribeMacro{\shortname}
+% |\shortname|\marg{id} is an alias for |\getpersonpreferred|.
+%
+% \section{Vital record accessors}
+%
+% Each accessor prints the stored value, or a bracketed placeholder
+% with a package warning if the value is missing.
+%
+% \DescribeMacro{\getpersonbirthdate}
+% \DescribeMacro{\getpersonbirthplace}
+% \DescribeMacro{\getpersondeathdate}
+% \DescribeMacro{\getpersondeathplace}
+% \DescribeMacro{\getpersonbaptismdate}
+% \DescribeMacro{\getpersonbaptismplace}
+% \DescribeMacro{\getpersonburialdate}
+% \DescribeMacro{\getpersonburialplace}
+% \DescribeMacro{\getpersonoccupation}
+% \DescribeMacro{\getpersonsex}
+%
+% |\getpersonbirthdate|\marg{id},
+% |\getpersonbirthplace|\marg{id}, etc.
+%
+% Date accessors format the stored ISO date through |\registerdate|.
+% Place and occupation accessors print the stored text verbatim.
+% |\getpersonsex|\marg{id} expands to the raw stored value
+% (|M|, |F|, or empty).
+%
+% \section{Generation computation}
+%
+% \DescribeMacro{\getgeneration}
+% |\getgeneration|\marg{id} computes and prints the generation number.
+% Persons with no parents are generation~1; others are one more than
+% their highest-generation parent.  Results are cached after the first
+% computation.  Cycles are detected and produce a warning.
+%
+% \DescribeMacro{\generationheading}
+% |\generationheading|\marg{id} prints a bold heading such as
+% ``Third Generation'' based on the person's computed generation.
+% Supports generations 1--20 by name; higher generations use the
+% numeric form.
+%
+% \section{Register entries}
+%
+% \DescribeMacro{\mainperson}
+% |\mainperson|\marg{id} typesets a numbered main register entry:
+% the entry number in bold, the person's name in small caps with
+% a generation superscript, and the parenthetical ancestor chain.
+% Each call increments the |registerperson| counter and creates
+% a label |person:|\meta{id} for cross-references.
+%
+% \DescribeMacro{\xrefperson}
+% |\xrefperson|\marg{id} prints a hyperlinked cross-reference to
+% a person's main entry, showing their name and entry number.
+%
+% \DescribeMacro{\childname}
+% |\childname|\marg{id} prints a person's name with generation
+% superscript, without an index entry.  Used in child lists.
+%
+% \DescribeMacro{\formatparents}
+% |\formatparents|\marg{id} prints the parenthetical ancestor chain.
+% Called automatically by |\mainperson| but available for standalone
+% use.
+%
+% \section{Child lists}
+%
+% \DescribeEnv{children}
+% |children| is an enumerated list with roman numeral labels,
+% accepting optional \textsf{enumitem} keys.
+%
+% \DescribeEnv{childrenof}
+% |childrenof|\marg{parent-a}\marg{parent-b}\oarg{enumitem keys}
+% is like |children| but validates that each |\child| entry has the
+% expected parent pair.
+%
+% \DescribeMacro{\child}
+% |\child|\marg{id}\marg{description} typesets a child entry.
+% The description text follows a comma after the child's name.
+%
+% \DescribeMacro{\childref}
+% |\childref|\marg{id}\marg{description} typesets a child entry
+% with a ``\textbf{+}'' continuation marker, indicating that this
+% child will appear later as a |\mainperson| entry.  This is a
+% core convention of the Register style.
+%
+% \section{Approximate dates}
+%
+% Genealogists frequently work with uncertain dates.  These commands
+% format common qualifiers used in genealogical writing:
+%
+% \DescribeMacro{\circa}
+% |\circa|\marg{date} prints ``c.\,\meta{date}''.
+%
+% \DescribeMacro{\before}
+% |\before|\marg{date} prints ``bef.\ \meta{date}''.
+%
+% \DescribeMacro{\after}
+% |\after|\marg{date} prints ``aft.\ \meta{date}''.
+%
+% \DescribeMacro{\between}
+% |\between|\marg{date1}\marg{date2} prints
+% ``bet.\ \meta{date1} and \meta{date2}''.
+%
+% \DescribeMacro{\aboutdate}
+% |\aboutdate|\marg{date} prints ``abt.\ \meta{date}''.
+%
+% \DescribeMacro{\probably}
+% |\probably|\marg{date} prints ``prob.\ \meta{date}''.
+%
+% \DescribeMacro{\say}
+% |\say|\marg{date} prints ``say \meta{date}''.
+%
+% These may be used both in prose and inside key values.
+%
+% \section{Gender-aware pronouns}
+%
+% These commands select pronouns based on the |sex| field
+% (|M|\,$\to$\,masculine, |F|\,$\to$\,feminine,
+% other/empty\,$\to$\,neutral).
+%
+% \DescribeMacro{\heshethey}
+% \DescribeMacro{\himherthem}
+% \DescribeMacro{\hishertheirargs}
+% \DescribeMacro{\HeSheThey}
+% \DescribeMacro{\HimHerThem}
+% \DescribeMacro{\HisHerTheir}
+% \DescribeMacro{\himselfherselfthemself}
+%
+% \noindent
+% All take a single \marg{person-id} argument.
+% Lowercase and capitalized variants are provided.
+%
+% \section{Source citations}
+%
+% \DescribeMacro{\registersource}
+% |\registersource|\marg{text} produces a footnote citation.
+%
+% \DescribeMacro{\registerendnote}
+% |\registerendnote|\marg{text} produces an endnote if the
+% \textsf{endnotes} package is loaded, otherwise falls back to
+% a footnote.
+%
+% \section{Date formatting}
+%
+% \DescribeMacro{\registerdate}
+% |\registerdate|\marg{YYYY-MM-DD} formats an ISO-8601 date using
+% the current \textsf{datetime2} style.  Non-ISO input is passed
+% through with a warning.
+%
+% \DescribeMacro{\registerdatestyle}
+% |\registerdatestyle|\marg{style} changes the \textsf{datetime2}
+% date style mid-document.
+%
+% \section{Shorthands}
+%
+% \DescribeMacro{\born}
+% \DescribeMacro{\died}
+% \DescribeMacro{\married}
+% \DescribeMacro{\baptized}
+% \DescribeMacro{\buried}
+% \DescribeMacro{\place}
+% \DescribeMacro{\dated}
+%
+% \noindent
+% |\born|\marg{text} prints ``b.\ \meta{text}'';
+% |\died| prints ``d.'';
+% |\married| prints ``m.'';
+% |\baptized| prints ``bp.'';
+% |\buried| prints ``bur.''.
+% |\place|\marg{text} prints \meta{text} in italics;
+% |\dated|\marg{text} prints \meta{text} as-is.
+%
+% \section{Register section}
+%
+% \DescribeEnv{registersection}
+% The |registersection| environment sets up typographic parameters
+% suitable for register prose: paragraph indentation of 1.5em,
+% no paragraph skip, and compact lists.  It also defines a local
+% |\generation|\marg{label} command for manual generation headings.
+%
+% \section{Validation}
+%
+% \DescribeMacro{\checkperson}
+% |\checkperson|\marg{id} runs validation checks on a single person:
+% verifies the name is non-empty, all listed parents are defined,
+% all dates are in ISO format, and places are not given without
+% corresponding dates.  Problems produce package warnings.
+%
+% \DescribeMacro{\checkregister}
+% |\checkregister| runs |\checkperson| on every registered person.
+% Call this near |\end{document}| to catch data integrity issues.
+%
+% \StopEventually{%
+%   \PrintChanges
+%   \PrintIndex
+% }
 %
 % \section{Implementation}
 %
+% \subsection{Package identification and options}
+%
 %    \begin{macrocode}
 %<*package>
-%% registerstyle.sty --- Lineage Genealogical Register Style
-%% Version 1.22  (2026-05-25)
+%% registerstyle.sty --- NEHGS-style genealogical register
+%% Copyright 2026 James P. Howard, II <jh@jameshoward.us>
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   https://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2008-05-04 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% The Current Maintainer of this work is James P. Howard, II.
 
-\ProvidesPackage{registerstyle}[2026/05/25 v1.22 Lineage genealogical register style]
-
-% ------------------------------------------------------------
-% Package options
-% ------------------------------------------------------------
-% index        Build the name index used by registry commands. Default.
-% noindex      Do not load imakeidx and suppress registry-generated index entries.
-% fullparents  Print full names in parent chains. Default.
-% abbrevparents Print preferred names in parent chains when available.
-% datestyle=<style> Set a datetime2 date style for register dates.
-% date=<style>      Alias for datestyle=<style>.
-
+\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+\ProvidesPackage{registerstyle}[2026/07/27 v1.0 NEHGS-style genealogical register]
+%    \end{macrocode}
+%
+% Option booleans and key=value option parser.
+%
+%    \begin{macrocode}
 \newif\ifr@index
 \r@indextrue
 \newif\ifr@option@abbrevparents
 \r@option@abbrevparentsfalse
+\newif\ifr@option@ngsq
+\r@option@ngsqfalse
 \newcommand{\r@datestyle}{}
 \newcommand{\r@optionkey}{}
 \newcommand{\r@optionvalue}{}
 \newcommand{\r@datestylekey}{datestyle}
 \newcommand{\r@datekey}{date}
+\newcommand{\r@numberingkey}{numbering}
 \newcommand{\r@splitoption}{}
 \def\r@splitoption#1=#2\@nil{%
   \renewcommand{\r@optionkey}{#1}%
   \renewcommand{\r@optionvalue}{#2}%
 }
+\newcommand{\r@ngsqvalue}{ngsq}
 \newcommand{\r@handleunknownoption}{%
   \@expandtwoargs\in@{=}{\CurrentOption}%
   \ifin@
@@ -93,7 +503,15 @@
       \ifx\r@optionkey\r@datekey
         \renewcommand{\r@datestyle}{\r@optionvalue}%
       \else
-        \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+        \ifx\r@optionkey\r@numberingkey
+          \ifx\r@optionvalue\r@ngsqvalue
+            \r@option@ngsqtrue
+          \else
+            \PackageWarning{registerstyle}{Unknown numbering style `\r@optionvalue'}%
+          \fi
+        \else
+          \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+        \fi
       \fi
     \fi
   \else
@@ -105,9 +523,14 @@
 \DeclareOption{noindex}{\r@indexfalse}
 \DeclareOption{fullparents}{\r@option@abbrevparentsfalse}
 \DeclareOption{abbrevparents}{\r@option@abbrevparentstrue}
+\DeclareOption{ngsq}{\r@option@ngsqtrue}
 \DeclareOption*{\r@handleunknownoption}
 \ProcessOptions\relax
-
+%    \end{macrocode}
+%
+% \subsection{Required packages}
+%
+%    \begin{macrocode}
 \RequirePackage{xparse}
 \RequirePackage{enumitem}
 \RequirePackage{etoolbox}
@@ -122,29 +545,31 @@
 \fi
 
 \makeatletter
-
-% ------------------------------------------------------------
-% Helpers
-% ------------------------------------------------------------
-\newcommand{\r@use}[1]{\ifcsdef{#1}{\csuse{#1}}{}}
+%    \end{macrocode}
+%
+% \subsection{Internal helpers}
+%
+%    \begin{macrocode}
 \newcommand{\r@trimid}[1]{\zap@space#1 \@empty}
 \newcommand{\r@warn}[1]{\PackageWarning{registerstyle}{#1}}
 \newcommand{\r@indexperson}[1]{\ifr@index\index{#1}\fi}
 
-% Generation value used for undefined persons or cycle fallbacks.
-% This keeps numeric comparisons safe while still producing warnings.
 \newcommand{\r@unknowngeneration}{0}
 
-\newcommand{\r@csvadd}[2]{% #1 = macro, #2 = item
+\newcommand{\r@csvadd}[2]{%
   \ifx#1\@empty
     \edef#1{#2}%
   \else
     \edef#1{#1,#2}%
   \fi
 }
-
-% Registry list used by validation commands.  Each person id is added once,
-% even if that id is later redefined.
+%    \end{macrocode}
+%
+% \subsection{Person registry}
+%
+% \begin{macro}{\r@rememberperson}
+% Add a person id to the global person list if not already present.
+%    \begin{macrocode}
 \newcommand{\r@personlist}{}
 \newcommand{\r@rememberperson}[1]{%
   \edef\r@id{\r@trimid{#1}}%
@@ -155,7 +580,12 @@
     }%
   \fi
 }
-
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\r@ensureperson}
+% Conditional that branches on whether a person is defined.
+%    \begin{macrocode}
 \newcommand{\r@ensureperson}[1]{%
   \ifcsdef{r@name@#1}{%
     \@firstoftwo
@@ -164,18 +594,12 @@
     \@secondoftwo
   }%
 }
-
-% ------------------------------------------------------------
-% PERSON REGISTRY
-% ------------------------------------------------------------
-% Person IDs should be simple identifiers: no spaces, braces, commas,
-% active characters, or other TeX-special material. Hyphens are fine.
+%    \end{macrocode}
+% \end{macro}
 %
-% Stable internal registration routine used by both public interfaces.
-% #1 id, #2 parents, #3 full name, #4 preferred name, #5 index entry,
-% #6 lineage parent, #7 sex/relation hint, #8 birth date.
-% Birth place, death date, and death place are initialized empty here
-% and are set by the key-value interface when supplied.
+% \begin{macro}{\r@definepersoninternal}
+% Internal 8-argument person definition used by |\defineperson|.
+%    \begin{macrocode}
 \newcommand{\r@definepersoninternal}[8]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifx\r@id\@empty
@@ -193,13 +617,22 @@
     \csgdef{r@birthplace@\r@id}{}%
     \csgdef{r@death@\r@id}{}%
     \csgdef{r@deathplace@\r@id}{}%
+    \csgdef{r@baptism@\r@id}{}%
+    \csgdef{r@baptismplace@\r@id}{}%
+    \csgdef{r@burial@\r@id}{}%
+    \csgdef{r@burialplace@\r@id}{}%
+    \csgdef{r@occupation@\r@id}{}%
+    \csgdef{r@marriagecount@\r@id}{0}%
     \csundef{r@generation@\r@id}%
     \csundef{r@generation@working@\r@id}%
   \fi
 }
-
-% Original positional interface, retained for compatibility.
-% \defineperson{id}{parents}{full}{preferred}[index-entry]
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\defineperson}
+% Legacy positional person definition.
+%    \begin{macrocode}
 \NewDocumentCommand{\defineperson}{mmmm o}{%
   \IfNoValueTF{#5}{%
     \r@definepersoninternal{#1}{#2}{#3}{#4}{#3}{}{}{}%
@@ -207,12 +640,12 @@
     \r@definepersoninternal{#1}{#2}{#3}{#4}{#5}{}{}{}%
   }%
 }
-
-% Key-value interface for new work.
-% \definepersonkv{id}{name={...}, preferred={...}, parents={...}, index={...}}
-% Forward-looking keys lineage-parent and sex are stored but not yet formatted.
-% The birth and death keys store exact ISO-form dates, YYYY-MM-DD, for later display.
-% The birth-place and death-place keys store place text for later display.
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\definepersonkv}
+% Key-value person definition.
+%    \begin{macrocode}
 \define@key{r@person}{name}{\def\r@kv@name{#1}}
 \define@key{r@person}{preferred}{\def\r@kv@preferred{#1}}
 \define@key{r@person}{parents}{\def\r@kv@parents{#1}}
@@ -223,6 +656,13 @@
 \define@key{r@person}{birth-place}{\def\r@kv@birthplace{#1}}
 \define@key{r@person}{death}{\def\r@kv@death{#1}}
 \define@key{r@person}{death-place}{\def\r@kv@deathplace{#1}}
+\define@key{r@person}{baptism}{\def\r@kv@baptism{#1}}
+\define@key{r@person}{baptism-place}{\def\r@kv@baptismplace{#1}}
+\define@key{r@person}{burial}{\def\r@kv@burial{#1}}
+\define@key{r@person}{burial-place}{\def\r@kv@burialplace{#1}}
+\define@key{r@person}{occupation}{\def\r@kv@occupation{#1}}
+\define@key{r@person}{marriage-date}{\def\r@kv@marriagedate{#1}}
+\define@key{r@person}{marriage-place}{\def\r@kv@marriageplace{#1}}
 
 \NewDocumentCommand{\definepersonkv}{mm}{%
   \def\r@kv@name{}%
@@ -235,6 +675,13 @@
   \def\r@kv@birthplace{}%
   \def\r@kv@death{}%
   \def\r@kv@deathplace{}%
+  \def\r@kv@baptism{}%
+  \def\r@kv@baptismplace{}%
+  \def\r@kv@burial{}%
+  \def\r@kv@burialplace{}%
+  \def\r@kv@occupation{}%
+  \def\r@kv@marriagedate{}%
+  \def\r@kv@marriageplace{}%
   \setkeys{r@person}{#2}%
   \edef\r@id{\r@trimid{#1}}%
   \ifx\r@id\@empty
@@ -258,11 +705,129 @@
     \expandafter\global\expandafter\let\csname r@birthplace@\r@id\endcsname\r@kv@birthplace
     \expandafter\global\expandafter\let\csname r@death@\r@id\endcsname\r@kv@death
     \expandafter\global\expandafter\let\csname r@deathplace@\r@id\endcsname\r@kv@deathplace
+    \expandafter\global\expandafter\let\csname r@baptism@\r@id\endcsname\r@kv@baptism
+    \expandafter\global\expandafter\let\csname r@baptismplace@\r@id\endcsname\r@kv@baptismplace
+    \expandafter\global\expandafter\let\csname r@burial@\r@id\endcsname\r@kv@burial
+    \expandafter\global\expandafter\let\csname r@burialplace@\r@id\endcsname\r@kv@burialplace
+    \expandafter\global\expandafter\let\csname r@occupation@\r@id\endcsname\r@kv@occupation
+    \csgdef{r@marriagecount@\r@id}{0}%
+    \ifx\r@kv@marriagedate\@empty\else
+      \csgdef{r@marriagecount@\r@id}{1}%
+      \expandafter\global\expandafter\let\csname r@marriagedate@\r@id @1\endcsname\r@kv@marriagedate
+      \csgdef{r@marriageplace@\r@id @1}{}%
+    \fi
+    \ifx\r@kv@marriageplace\@empty\else
+      \ifcsdef{r@marriagedate@\r@id @1}{%
+        \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @1\endcsname\r@kv@marriageplace
+      }{%
+        \csgdef{r@marriagecount@\r@id}{1}%
+        \csgdef{r@marriagedate@\r@id @1}{}%
+        \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @1\endcsname\r@kv@marriageplace
+      }%
+    \fi
     \csundef{r@generation@\r@id}%
     \csundef{r@generation@working@\r@id}%
   \fi
 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Multiple marriage support}
+%
+% \begin{macro}{\addmarriage}
+%    \begin{macrocode}
+\define@key{r@marriage}{date}{\def\r@mkv@date{#1}}
+\define@key{r@marriage}{place}{\def\r@mkv@place{#1}}
+\define@key{r@marriage}{spouse}{\def\r@mkv@spouse{#1}}
 
+\NewDocumentCommand{\addmarriage}{mm}{%
+  \def\r@mkv@date{}%
+  \def\r@mkv@place{}%
+  \def\r@mkv@spouse{}%
+  \setkeys{r@marriage}{#2}%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifx\r@id\@empty
+    \r@warn{Cannot add marriage to empty person id}%
+  \else
+    \ifcsdef{r@name@\r@id}{%
+      \edef\r@mcnt{\csuse{r@marriagecount@\r@id}}%
+      \edef\r@newmcnt{\the\numexpr\r@mcnt+1\relax}%
+      \csgdef{r@marriagecount@\r@id}{\r@newmcnt}%
+      \expandafter\global\expandafter\let\csname r@marriagedate@\r@id @\r@newmcnt\endcsname\r@mkv@date
+      \expandafter\global\expandafter\let\csname r@marriageplace@\r@id @\r@newmcnt\endcsname\r@mkv@place
+      \expandafter\global\expandafter\let\csname r@marriagespouse@\r@id @\r@newmcnt\endcsname\r@mkv@spouse
+    }{%
+      \r@warn{Cannot add marriage to undefined person `\r@id'}%
+    }%
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\getmarriagecount}
+% \begin{macro}{\getmarriagedate}
+% \begin{macro}{\getmarriageplace}
+% \begin{macro}{\getmarriagespouse}
+%    \begin{macrocode}
+\newcommand{\getmarriagecount}[1]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagecount@\r@id}{\csuse{r@marriagecount@\r@id}}{0}%
+}
+
+\newcommand{\getmarriagedate}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagedate@\r@id @#2}{%
+    \ifcsempty{r@marriagedate@\r@id @#2}{%
+      \r@warn{No date stored for marriage #2 of `\r@id'}%
+      \textbf{[marriage date unknown]}%
+    }{%
+      \edef\r@mdate{\csuse{r@marriagedate@\r@id @#2}}%
+      \expandafter\registerdate\expandafter{\r@mdate}%
+    }%
+  }{%
+    \r@warn{No marriage #2 for `\r@id'}%
+    \textbf{[no marriage #2]}%
+  }%
+}
+
+\newcommand{\getmarriageplace}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriageplace@\r@id @#2}{%
+    \ifcsempty{r@marriageplace@\r@id @#2}{%
+      \r@warn{No place stored for marriage #2 of `\r@id'}%
+      \textbf{[marriage place unknown]}%
+    }{%
+      \csuse{r@marriageplace@\r@id @#2}%
+    }%
+  }{%
+    \r@warn{No marriage #2 for `\r@id'}%
+    \textbf{[no marriage #2]}%
+  }%
+}
+
+\newcommand{\getmarriagespouse}[2]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@marriagespouse@\r@id @#2}{%
+    \ifcsempty{r@marriagespouse@\r@id @#2}{}{%
+      \edef\r@spid{\csuse{r@marriagespouse@\r@id @#2}}%
+      \getpersonname{\r@spid}%
+    }%
+  }{}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Name retrieval}
+%
+% \begin{macro}{\getpersonname}
+% \begin{macro}{\getpersonnameNI}
+% \begin{macro}{\getpersonpreferred}
+% \begin{macro}{\getpersonabbrevNI}
+% \begin{macro}{\shortname}
+%    \begin{macrocode}
 \newcommand{\getpersonname}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@name@\r@id}{%
@@ -275,7 +840,6 @@
   }%
 }
 
-% Printed name WITHOUT indexing (for parent chains and inline)
 \newcommand{\getpersonnameNI}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@name@\r@id}{%
@@ -286,7 +850,6 @@
   }%
 }
 
-% Preferred name (small caps), empty if not defined or empty string
 \newcommand{\getpersonpreferred}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@preferred@\r@id}{%
@@ -294,7 +857,6 @@
   }{}%
 }
 
-% Abbrev name for parent chains: preferred if available, else full name (no index)
 \newcommand{\getpersonabbrevNI}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@preferred@\r@id}{%
@@ -309,88 +871,136 @@
 }
 
 \newcommand{\shortname}[1]{\getpersonpreferred{#1}}
-
-% Stored birth date formatted through the public date formatter.
-% The birth key should be an exact ISO-form date, YYYY-MM-DD.
-\newcommand{\getpersonbirthdate}[1]{%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Vital record accessors}
+%
+% \begin{macro}{\r@getvitaldate}
+% \begin{macro}{\r@getvitalplace}
+% Shared helpers for date and place retrieval.
+%    \begin{macrocode}
+\newcommand{\r@getvitaldate}[3]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@birth@\r@id}{%
-    \ifcsempty{r@birth@\r@id}{%
-      \r@warn{No birth date stored for `\r@id'}%
-      \textbf{[birth date unknown for \r@id]}%
+  \ifcsdef{r@#2@\r@id}{%
+    \ifcsempty{r@#2@\r@id}{%
+      \r@warn{No #3 date stored for `\r@id'}%
+      \textbf{[#3 date unknown for \r@id]}%
     }{%
-      \edef\r@birthdate{\csuse{r@birth@\r@id}}%
-      \expandafter\registerdate\expandafter{\r@birthdate}%
+      \edef\r@thedate{\csuse{r@#2@\r@id}}%
+      \expandafter\registerdate\expandafter{\r@thedate}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving birth date}%
+    \r@warn{Undefined person `\r@id' while retrieving #3 date}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-
-% Stored birth place printed as entered.
-\newcommand{\getpersonbirthplace}[1]{%
+\newcommand{\r@getvitalplace}[3]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@birthplace@\r@id}{%
-    \ifcsempty{r@birthplace@\r@id}{%
-      \r@warn{No birth place stored for `\r@id'}%
-      \textbf{[birth place unknown for \r@id]}%
+  \ifcsdef{r@#2@\r@id}{%
+    \ifcsempty{r@#2@\r@id}{%
+      \r@warn{No #3 place stored for `\r@id'}%
+      \textbf{[#3 place unknown for \r@id]}%
     }{%
-      \csuse{r@birthplace@\r@id}%
+      \csuse{r@#2@\r@id}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving birth place}%
+    \r@warn{Undefined person `\r@id' while retrieving #3 place}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-% Stored death date formatted through the public date formatter.
-% The death key should be an exact ISO-form date, YYYY-MM-DD.
-\newcommand{\getpersondeathdate}[1]{%
+\newcommand{\getpersonbirthdate}[1]{\r@getvitaldate{#1}{birth}{birth}}
+\newcommand{\getpersonbirthplace}[1]{\r@getvitalplace{#1}{birthplace}{birth}}
+\newcommand{\getpersondeathdate}[1]{\r@getvitaldate{#1}{death}{death}}
+\newcommand{\getpersondeathplace}[1]{\r@getvitalplace{#1}{deathplace}{death}}
+\newcommand{\getpersonbaptismdate}[1]{\r@getvitaldate{#1}{baptism}{baptism}}
+\newcommand{\getpersonbaptismplace}[1]{\r@getvitalplace{#1}{baptismplace}{baptism}}
+\newcommand{\getpersonburialdate}[1]{\r@getvitaldate{#1}{burial}{burial}}
+\newcommand{\getpersonburialplace}[1]{\r@getvitalplace{#1}{burialplace}{burial}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\getpersonoccupation}
+% \begin{macro}{\getpersonsex}
+%    \begin{macrocode}
+\newcommand{\getpersonoccupation}[1]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@death@\r@id}{%
-    \ifcsempty{r@death@\r@id}{%
-      \r@warn{No death date stored for `\r@id'}%
-      \textbf{[death date unknown for \r@id]}%
+  \ifcsdef{r@occupation@\r@id}{%
+    \ifcsempty{r@occupation@\r@id}{%
+      \r@warn{No occupation stored for `\r@id'}%
+      \textbf{[occupation unknown for \r@id]}%
     }{%
-      \edef\r@deathdate{\csuse{r@death@\r@id}}%
-      \expandafter\registerdate\expandafter{\r@deathdate}%
+      \csuse{r@occupation@\r@id}%
     }%
   }{%
-    \r@warn{Undefined person `\r@id' while retrieving death date}%
+    \r@warn{Undefined person `\r@id' while retrieving occupation}%
     \textbf{[undefined \r@id]}%
   }%
 }
 
-% Stored death place printed as entered.
-\newcommand{\getpersondeathplace}[1]{%
+\newcommand{\getpersonsex}[1]{%
   \edef\r@id{\r@trimid{#1}}%
-  \ifcsdef{r@deathplace@\r@id}{%
-    \ifcsempty{r@deathplace@\r@id}{%
-      \r@warn{No death place stored for `\r@id'}%
-      \textbf{[death place unknown for \r@id]}%
-    }{%
-      \csuse{r@deathplace@\r@id}%
-    }%
-  }{%
-    \r@warn{Undefined person `\r@id' while retrieving death place}%
-    \textbf{[undefined \r@id]}%
-  }%
+  \ifcsdef{r@sex@\r@id}{\csuse{r@sex@\r@id}}{}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Gender-aware pronouns}
+%
+% \begin{macro}{\r@pronoun}
+% Internal dispatcher: selects masculine, feminine, or neutral form.
+%    \begin{macrocode}
+\newcommand{\r@pronoun}[4]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \ifcsdef{r@sex@\r@id}{%
+    \edef\r@thesex{\csuse{r@sex@\r@id}}%
+    \def\r@male{M}\def\r@female{F}%
+    \ifx\r@thesex\r@male #2%
+    \else\ifx\r@thesex\r@female #3%
+    \else #4%
+    \fi\fi
+  }{#4}%
 }
 
-% ------------------------------------------------------------
-% GENERATION COMPUTATION (recursive, memoized)
-% ------------------------------------------------------------
-% Compute a person's generation without producing output.  The public
-% \getgeneration command below calls this helper and then prints only the
-% requested person's cached generation.  This avoids stray generation numbers
-% leaking from recursive parent computations.
+\newcommand{\heshethey}[1]{\r@pronoun{#1}{he}{she}{they}}
+\newcommand{\himherthem}[1]{\r@pronoun{#1}{him}{her}{them}}
+\newcommand{\hishertheirargs}[1]{\r@pronoun{#1}{his}{her}{their}}
+\newcommand{\HeSheThey}[1]{\r@pronoun{#1}{He}{She}{They}}
+\newcommand{\HimHerThem}[1]{\r@pronoun{#1}{Him}{Her}{Them}}
+\newcommand{\HisHerTheir}[1]{\r@pronoun{#1}{His}{Her}{Their}}
+\newcommand{\himselfherselfthemself}[1]{\r@pronoun{#1}{himself}{herself}{themself}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Approximate dates}
+%
+%    \begin{macrocode}
+\newcommand{\circa}[1]{c.\,#1}
+\newcommand{\before}[1]{bef.\ #1}
+\newcommand{\after}[1]{aft.\ #1}
+\newcommand{\between}[2]{bet.\ #1 and #2}
+\newcommand{\aboutdate}[1]{abt.\ #1}
+\newcommand{\probably}[1]{prob.\ #1}
+\newcommand{\say}[1]{say #1}
+%    \end{macrocode}
+%
+% \subsection{Generation computation}
+%
+% \begin{macro}{\r@computegeneration}
+% Recursive computation with cycle detection via a ``working'' flag.
+%    \begin{macrocode}
 \newcommand{\r@computegeneration}[1]{%
   \begingroup
     \edef\r@target{\r@trimid{#1}}%
     \ifcsdef{r@generation@\r@target}{%
-      % already cached
     }{%
       \ifcsdef{r@generation@working@\r@target}{%
         \r@warn{Cycle detected while computing generation for `\r@target'}%
@@ -431,7 +1041,11 @@
     }%
   \endgroup
 }
-
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\getgeneration}
+%    \begin{macrocode}
 \newcommand{\getgeneration}[1]{%
   \begingroup
     \edef\r@target{\r@trimid{#1}}%
@@ -440,28 +1054,18 @@
   \endgroup
   \r@generationresult
 }
-
-% Vertical spacing
-
-\newcommand{\registerpersonsep}{1em}
-\newif\ifregister@afterheading
-\register@afterheadingfalse
-
-% Mark "the next mainperson is immediately after a heading"
-\pretocmd{\section}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subsection}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subsubsection}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\paragraph}{\global\register@afterheadingtrue}{}{}
-\pretocmd{\subparagraph}{\global\register@afterheadingtrue}{}{}
-
-
-% ------------------------------------------------------------
-% ANCESTRY COLLECTION (Register chain: parent, then that parent's parents, etc.)
-% ------------------------------------------------------------
-\newcommand{\r@alist}{} % scratch list
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Ancestor chain formatting}
+%
+% \begin{macro}{\r@collectancestors}
+% \begin{macro}{\r@addoneancestor}
+%    \begin{macrocode}
+\newcommand{\r@alist}{}
 \newif\ifr@ancestorchain@lineage
 
-\newcommand{\collectancestors}[1]{%
+\newcommand{\r@collectancestors}[1]{%
   \edef\r@id{\r@trimid{#1}}%
   \ifcsdef{r@ancestor@seen@\r@id}{%
     \r@warn{Cycle detected while collecting ancestors for `\r@id'}%
@@ -472,17 +1076,17 @@
         \ifcsempty{r@lineageparent@\r@id}{%
           \edef\r@plist{\csuse{r@parents@\r@id}}%
           \ifx\r@plist\@empty\else
-            \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+            \expandafter\forcsvlist\expandafter\r@addoneancestor\expandafter{\r@plist}%
           \fi
         }{%
           \r@ancestorchain@lineagetrue
           \edef\r@lineagepid{\csuse{r@lineageparent@\r@id}}%
-          \expandafter\addoneancestor\expandafter{\r@lineagepid}%
+          \expandafter\r@addoneancestor\expandafter{\r@lineagepid}%
         }%
       }{%
         \edef\r@plist{\csuse{r@parents@\r@id}}%
         \ifx\r@plist\@empty\else
-          \expandafter\forcsvlist\expandafter\addoneancestor\expandafter{\r@plist}%
+          \expandafter\forcsvlist\expandafter\r@addoneancestor\expandafter{\r@plist}%
         \fi
       }%
     }{%
@@ -490,35 +1094,36 @@
     }%
   }%
 }
-\newcommand{\addoneancestor}[1]{%
+\newcommand{\r@addoneancestor}[1]{%
   \edef\r@pid{\r@trimid{#1}}%
   \ifx\r@pid\@empty
     \r@warn{Empty parent id in ancestor chain}%
   \else
     \ifcsdef{r@parents@\r@pid}{%
       \r@csvadd{\r@alist}{\r@pid}%
-      \collectancestors{\r@pid}%
+      \r@collectancestors{\r@pid}%
     }{%
       \r@warn{Undefined parent `\r@pid' in ancestor chain}%
       \r@csvadd{\r@alist}{\r@pid}%
     }%
   \fi
 }
-
-% ------------------------------------------------------------
-% PARENT / ANCESTOR FORMATTER
-% ------------------------------------------------------------
-\newif\ifabbrevparents
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\formatparents}
+%    \begin{macrocode}
+\newif\ifr@abbrevparents
 \ifr@option@abbrevparents
-  \abbrevparentstrue
+  \r@abbrevparentstrue
 \else
-  \abbrevparentsfalse
+  \r@abbrevparentsfalse
 \fi
 
 \newcount\r@pcnt
 \newcount\r@i
 
-% Print "Name^gen" as an unbreakable unit (prevents drifting/overlap)
 \newcommand{\r@namegensNI}[1]{%
   \mbox{\getpersonnameNI{#1}\textsuperscript{\getgeneration{#1}}}%
 }
@@ -530,10 +1135,9 @@
   \begingroup
     \def\r@alist{}%
     \r@ancestorchain@lineagefalse
-    \collectancestors{#1}%
+    \r@collectancestors{#1}%
     \edef\r@plist{\r@alist}%
     \ifx\r@plist\@empty
-      % nothing
     \else
       \r@pcnt=0\relax
       \def\r@countone##1{\advance\r@pcnt by 1\relax}%
@@ -554,7 +1158,7 @@
               \fi
             \fi
           \fi
-          \ifabbrevparents
+          \ifr@abbrevparents
             \r@abbrevnamegensNI{\r@pid}%
           \else
             \r@namegensNI{\r@pid}%
@@ -565,28 +1169,56 @@
     \fi
   \endgroup
 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Main register entries}
+%
+% \begin{macro}{\mainperson}
+%    \begin{macrocode}
+\newcommand{\registerpersonsep}{1em}
+\newif\ifr@afterheading
+\r@afterheadingfalse
 
-% ------------------------------------------------------------
-% DISPLAY
-% ------------------------------------------------------------
+\pretocmd{\section}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subsection}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subsubsection}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\paragraph}{\global\r@afterheadingtrue}{}{}
+\pretocmd{\subparagraph}{\global\r@afterheadingtrue}{}{}
+
 \newcounter{registerperson}
 
 \NewDocumentCommand{\mainperson}{m}{%
   \edef\r@id{\r@trimid{#1}}%
   \par
-  \ifregister@afterheading
-    \global\register@afterheadingfalse
+  \ifr@afterheading
+    \global\r@afterheadingfalse
   \else
     \addvspace{\registerpersonsep}%
   \fi
   \refstepcounter{registerperson}%
+  \csgdef{r@mainentry@\r@id}{\theregisterperson}%
   \label{person:\r@id}%
   \noindent
   \textbf{\theregisterperson.\ }%
   \getpersonname{\r@id}\textsuperscript{\getgeneration{\r@id}}%
   \formatparents{\r@id}\xspace
 }
-
+%    \end{macrocode}
+% \end{macro}
+%
+% NGSQ numbering override.
+%    \begin{macrocode}
+\ifr@option@ngsq
+  \renewcommand{\theregisterperson}{\arabic{registerperson}}
+\fi
+%    \end{macrocode}
+%
+% \subsection{Cross-references}
+%
+% \begin{macro}{\xrefperson}
+% \begin{macro}{\childname}
+%    \begin{macrocode}
 \NewDocumentCommand{\xrefperson}{m}{%
   \edef\r@id{\r@trimid{#1}}%
   \hyperref[person:\r@id]{%
@@ -599,24 +1231,19 @@
   \edef\r@id{\r@trimid{#1}}%
   \getpersonnameNI{\r@id}\textsuperscript{\getgeneration{\r@id}}%
 }
-
-
-% ------------------------------------------------------------
-% CHILD LIST HELPERS
-% ------------------------------------------------------------
-% The original kidslist environment remains available.  The children
-% environment provides a cleaner interface around the same basic list style.
-% childrenof records an expected parent pair and warns when a listed child
-% does not have that exact parent pair, in either order.
-
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Child lists}
+%
+% \begin{environment}{children}
+% \begin{environment}{childrenof}
+%    \begin{macrocode}
 \newif\ifr@childrenof
 \r@childrenoffalse
 \newcommand{\r@childrenof@a}{}
 \newcommand{\r@childrenof@b}{}
-
-\newenvironment{kidslist}{
-  \begin{enumerate}[label=\roman*., leftmargin=2em, itemsep=0pt, topsep=0pt]
-}{\end{enumerate}}
 
 \NewDocumentEnvironment{children}{ O{} }{%
   \begin{enumerate}[label=\roman*., leftmargin=2em, itemsep=0pt, topsep=0pt,#1]%
@@ -632,7 +1259,14 @@
   \end{children}%
   \endgroup
 }
-
+%    \end{macrocode}
+% \end{environment}
+% \end{environment}
+%
+% \begin{macro}{\r@checkchildparents}
+% \begin{macro}{\child}
+% \begin{macro}{\childref}
+%    \begin{macrocode}
 \newcommand{\r@checkchildparents}[1]{%
   \ifr@childrenof
     \edef\r@childid{\r@trimid{#1}}%
@@ -641,10 +1275,8 @@
       \edef\r@expectedparents{\r@childrenof@a,\r@childrenof@b}%
       \edef\r@expectedparentsrev{\r@childrenof@b,\r@childrenof@a}%
       \ifx\r@childparents\r@expectedparents
-        % parent pair matches
       \else
         \ifx\r@childparents\r@expectedparentsrev
-          % parent pair matches in reverse order
         \else
           \r@warn{Child `\r@childid' listed under parents `\r@expectedparents' but has parents `\r@childparents'}%
         \fi
@@ -661,17 +1293,60 @@
   \IfBlankF{#2}{, #2}%
 }
 
+\NewDocumentCommand{\childref}{m m}{%
+  \r@checkchildparents{#1}%
+  \item \textbf{+}\space\childname{#1}%
+  \IfBlankF{#2}{, #2}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Source and note support}
+%
+% \begin{macro}{\registersource}
+% \begin{macro}{\registerendnote}
+%    \begin{macrocode}
+\NewDocumentCommand{\registersource}{m}{%
+  \footnote{#1}%
+}
 
-% ------------------------------------------------------------
-% DATE FORMATTER
-% ------------------------------------------------------------
-% Date formatting is delegated to datetime2.  The public registerstyle
-% interface stays deliberately small: \registerdate accepts exact ISO-form
-% dates, YYYY-MM-DD.  The package option datestyle=<datetime2-style>, or
-% its alias date=<datetime2-style>, passes a named datetime2 style directly
-% to \DTMsetdatestyle.  registerstyle does not define or translate date
-% style names.
+\NewDocumentCommand{\registerendnote}{m}{%
+  \@ifpackageloaded{endnotes}{\endnote{#1}}{\footnote{#1}}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Automatic generation headings}
+%
+% \begin{macro}{\generationheading}
+%    \begin{macrocode}
+\newcommand{\r@generationword}[1]{%
+  \ifcase#1 Zeroth\or First\or Second\or Third\or Fourth\or Fifth\or
+    Sixth\or Seventh\or Eighth\or Ninth\or Tenth\or Eleventh\or
+    Twelfth\or Thirteenth\or Fourteenth\or Fifteenth\or Sixteenth\or
+    Seventeenth\or Eighteenth\or Nineteenth\or Twentieth\else
+    #1th\fi
+}
 
+\newcommand{\generationheading}[1]{%
+  \edef\r@id{\r@trimid{#1}}%
+  \r@computegeneration{\r@id}%
+  \edef\r@gen{\csuse{r@generation@\r@id}}%
+  \par\medskip\noindent
+  \textbf{\r@generationword{\r@gen}\space Generation}%
+  \par\nobreak
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Date formatting}
+%
+% \begin{macro}{\registerdate}
+% \begin{macro}{\registerdatestyle}
+%    \begin{macrocode}
 \newcommand{\registerdatestyle}[1]{%
   \DTMsetdatestyle{#1}%
 }
@@ -693,13 +1368,13 @@
 
 \NewDocumentCommand{\registerdate}{m}{\registerstyle_date:n{#1}}
 \ExplSyntaxOff
-
-% ------------------------------------------------------------
-% VALIDATION / REPORTING
-% ------------------------------------------------------------
-% Validation is intentionally warning-only.  It checks registry structure and
-% exact ISO-form date metadata without changing document output.
-
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Date validation}
+%
+%    \begin{macrocode}
 \ExplSyntaxOn
 \cs_generate_variant:Nn \regex_match:nnF { neF }
 \cs_new_protected:Npn \registerstyle_validate_iso_date:nn #1 #2
@@ -713,8 +1388,14 @@
 \NewDocumentCommand{\r@validateisodate}{m m}
   {\registerstyle_validate_iso_date:nn {#1} {#2}}
 \ExplSyntaxOff
-
-\newcommand{\r@checkdatefield}[3]{% #1 person id, #2 field label, #3 date macro suffix
+%    \end{macrocode}
+%
+% \subsection{Validation commands}
+%
+% \begin{macro}{\checkperson}
+% \begin{macro}{\checkregister}
+%    \begin{macrocode}
+\newcommand{\r@checkdatefield}[3]{%
   \ifcsdef{r@#3@#1}{%
     \edef\r@datevalue{\csuse{r@#3@#1}}%
     \ifx\r@datevalue\@empty\else
@@ -723,7 +1404,7 @@
   }{}%
 }
 
-\newcommand{\r@checkplacewithoutdate}[5]{% #1 id, #2 place suffix, #3 date suffix, #4 place label, #5 date label
+\newcommand{\r@checkplacewithoutdate}[5]{%
   \ifcsdef{r@#2@#1}{%
     \ifcsempty{r@#2@#1}{}{%
       \ifcsdef{r@#3@#1}{%
@@ -761,8 +1442,12 @@
         \r@checkparentlist{\r@id}%
         \r@checkdatefield{\r@id}{Birth}{birth}%
         \r@checkdatefield{\r@id}{Death}{death}%
+        \r@checkdatefield{\r@id}{Baptism}{baptism}%
+        \r@checkdatefield{\r@id}{Burial}{burial}%
         \r@checkplacewithoutdate{\r@id}{birthplace}{birth}{birth place}{birth date}%
         \r@checkplacewithoutdate{\r@id}{deathplace}{death}{death place}{death date}%
+        \r@checkplacewithoutdate{\r@id}{baptismplace}{baptism}{baptism place}{baptism date}%
+        \r@checkplacewithoutdate{\r@id}{burialplace}{burial}{burial place}{burial date}%
       }{%
         \r@warn{Cannot check undefined person `\r@id'}%
       }%
@@ -780,19 +1465,26 @@
     \fi
   \endgroup
 }
-
-% ------------------------------------------------------------
-% NEHGS shorthand helpers
-% ------------------------------------------------------------
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Shorthands}
+%
+%    \begin{macrocode}
 \newcommand{\born}[1]{b.\ #1}
 \newcommand{\died}[1]{d.\ #1}
 \newcommand{\married}[1]{m.\ #1}
+\newcommand{\baptized}[1]{bp.\ #1}
+\newcommand{\buried}[1]{bur.\ #1}
 \newcommand{\place}[1]{\textit{#1}}
 \newcommand{\dated}[1]{#1}
-
-% ------------------------------------------------------------
-% Appendix-safe scope
-% ------------------------------------------------------------
+%    \end{macrocode}
+%
+% \subsection{Register section environment}
+%
+% \begin{environment}{registersection}
+%    \begin{macrocode}
 \NewDocumentEnvironment{registersection}{ O{} }{%
   \begingroup
   \setlength{\parindent}{1.5em}
@@ -802,9 +1494,20 @@
 }{%
   \par\endgroup
 }
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{Backward compatibility}
+%
+% Old public names retained as aliases for one release cycle.
+%    \begin{macrocode}
+\let\collectancestors\r@collectancestors
+\let\addoneancestor\r@addoneancestor
+\newif\ifabbrevparents
+\ifr@abbrevparents\abbrevparentstrue\else\abbrevparentsfalse\fi
 
 \makeatother
-
 %</package>
 %    \end{macrocode}
+%
 % \Finale

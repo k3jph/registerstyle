@@ -1,0 +1,78 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{date-test}{
+  name        = {Date Test Person},
+  parents     = {},
+  birth       = {1985-12-17},
+  birth-place = {New York, New York},
+  death       = {2060-03-01},
+  death-place = {Los Angeles, California},
+  baptism     = {1986-01-15},
+  baptism-place = {St. Patrick's Cathedral, New York},
+  burial      = {2060-03-05},
+  burial-place  = {Forest Lawn, California}
+}
+
+\definepersonkv{minimal-date}{
+  name    = {Minimal Person},
+  parents = {},
+  birth   = {1900-06-01}
+}
+
+\START
+\begin{document}
+
+\TEST{Birth date and place storage}{
+  \TYPE{\csuse{r@birth@date-test}}
+  \TYPE{\csuse{r@birthplace@date-test}}
+}
+
+\TEST{Death date and place storage}{
+  \TYPE{\csuse{r@death@date-test}}
+  \TYPE{\csuse{r@deathplace@date-test}}
+}
+
+\TEST{Baptism date and place storage}{
+  \TYPE{\csuse{r@baptism@date-test}}
+  \TYPE{\csuse{r@baptismplace@date-test}}
+}
+
+\TEST{Burial date and place storage}{
+  \TYPE{\csuse{r@burial@date-test}}
+  \TYPE{\csuse{r@burialplace@date-test}}
+}
+
+\TEST{Vital record accessor output}{
+  Birth date: \getpersonbirthdate{date-test}.
+  Birth place: \getpersonbirthplace{date-test}.
+  Death date: \getpersondeathdate{date-test}.
+  Death place: \getpersondeathplace{date-test}.
+  Baptism date: \getpersonbaptismdate{date-test}.
+  Baptism place: \getpersonbaptismplace{date-test}.
+  Burial date: \getpersonburialdate{date-test}.
+  Burial place: \getpersonburialplace{date-test}.
+}
+
+\TEST{Approximate date qualifiers}{
+  \TYPE{\circa{1800}}
+  \TYPE{\before{1850}}
+  \TYPE{\after{1900}}
+  \TYPE{\between{1800}{1850}}
+  \TYPE{\aboutdate{1750}}
+  \TYPE{\probably{1820}}
+  \TYPE{\say{1700}}
+}
+
+\TEST{Formatted date}{
+  Formatted: \registerdate{2026-07-27}.
+}
+
+\TEST{Invalid date warning}{
+  \registerdate{not-a-date}.
+}
+
+\end{document}
+\END

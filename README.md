@@ -1,39 +1,133 @@
 # registerstyle
 
-`registerstyle` is a LaTeX package for writing genealogical register-style prose.
+A LaTeX package for typesetting genealogical registers in the style of
+the *New England Historical and Genealogical Register* (NEHGS).
 
-Current development version: 1.20 packaging fixture.
+## Features
 
-## What it currently does
+- **Person registry** with key-value interface (`\definepersonkv`)
+  and legacy positional interface (`\defineperson`).
+- **Computed generation numbers** from parent links, with cycle
+  detection.
+- **Numbered main entries** (`\mainperson`) with ancestor chains.
+- **Child lists** (`children`, `childrenof` environments) with
+  parent validation.
+- **Continuation markers** (`\childref`) for children who appear later
+  as main entries — a core Register convention.
+- **Multiple marriage support** (`\addmarriage`) with date, place,
+  and spouse tracking.
+- **Vital records**: birth, death, baptism, burial dates and places;
+  occupation.
+- **Gender-aware pronouns** (`\HeSheThey`, `\himherthem`, etc.)
+  keyed to the `sex` field.
+- **Approximate date qualifiers** (`\circa`, `\before`, `\after`,
+  `\between`, `\aboutdate`, `\probably`, `\say`).
+- **Date formatting** through `datetime2` with ISO-8601 validation.
+- **Source citations** (`\registersource`, `\registerendnote`).
+- **Automatic generation headings** (`\generationheading`).
+- **Cross-references** (`\xrefperson`) with hyperlinks.
+- **Index generation** via `imakeidx` (optional).
+- **Validation** (`\checkperson`, `\checkregister`) warns on
+  missing or malformed data.
+- **NGSQ numbering** option for Modified Register style.
 
-- Defines people with `\definepersonkv` or the older positional `\defineperson`.
-- Computes generation numbers from parent links.
-- Prints main register entries with `\mainperson`.
-- Provides child-list helpers with `children`, `childrenof`, and `\child`.
-- Stores structured birth and death metadata.
-- Formats dates through `datetime2` using `\registerdate{YYYY-MM-DD}`.
-- Provides warning-only validation with `\checkperson` and `\checkregister`.
-
-## Build
+## Installation
 
 From the package root:
 
 ```sh
-latex registerstyle.ins
+l3build unpack
+```
+
+Or manually:
+
+```sh
+latex source/registerstyle.ins
 ```
 
 This extracts `registerstyle.sty` from `source/registerstyle.dtx`.
+Move the resulting `.sty` file to a directory searched by TeX.
 
-To build the draft documentation:
+To build the documentation:
 
 ```sh
-pdflatex source/registerstyle.dtx
-makeindex -s gind.ist -o registerstyle.ind registerstyle.idx
-pdflatex source/registerstyle.dtx
+l3build doc
 ```
+
+To run the test suite:
+
+```sh
+l3build check
+```
+
+## Quick start
+
+```latex
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents]{registerstyle}
+
+\definepersonkv{john-doe}{
+  name      = {John Doe},
+  preferred = {John},
+  parents   = {},
+  sex       = {M},
+  birth     = {1820-03-15},
+  birth-place = {Boston, Massachusetts}
+}
+
+\definepersonkv{james-doe}{
+  name      = {James Doe},
+  preferred = {James},
+  parents   = {john-doe},
+  sex       = {M},
+  birth     = {1850-11-02}
+}
+
+\begin{document}
+\begin{registersection}
+\mainperson{john-doe} was born \getpersonbirthdate{john-doe}
+in \getpersonbirthplace{john-doe}.
+
+\begin{children}
+  \childref{james-doe}{b.~\getpersonbirthdate{james-doe}.}
+\end{children}
+
+\mainperson{james-doe} was born \getpersonbirthdate{james-doe}.
+\end{registersection}
+\checkregister
+\end{document}
+```
+
+## Package options
+
+| Option | Description |
+|--------|-------------|
+| `index` (default) | Generate index entries via `imakeidx` |
+| `noindex` | Suppress index generation |
+| `fullparents` (default) | Full names in ancestor chains |
+| `abbrevparents` | Preferred names in ancestor chains |
+| `ngsq` | NGSQ (Modified Register) numbering |
+| `datestyle=`*style* | Set `datetime2` date style (alias: `date=`) |
 
 ## Examples and tests
 
-The `examples/` directory contains a minimal register and a fuller Stuart four-generation fixture. The `testfiles/` directory contains simple smoke tests intended for manual compilation during early development, including a copy of the Stuart fixture for regression testing.
+The `examples/` directory contains:
 
-The Stuart example includes legitimate descendants of James VI and I and Anne of Denmark through four generations, with spouses included only where needed to establish parentage. Miscarriages, stillbirths, illegitimate lines, alleged lines, and morganatic branches are omitted from the example scope.
+- `getting-started.tex` — introductory example with all major
+  features
+- `minimal-register.tex` — smallest working register
+- `multi-marriage.tex` — person with two marriages and children
+  from each
+- `stuart-register.tex` — four-generation Stuart dynasty register
+
+The `testfiles/` directory contains `l3build` regression tests
+covering each feature area.
+
+## License
+
+Copyright 2026 James P. Howard, II.
+
+This work may be distributed and/or modified under the conditions
+of the LaTeX Project Public License, version 1.3c or later.
+See the [LICENSE](LICENSE) file for details.
