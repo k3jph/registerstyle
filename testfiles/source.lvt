@@ -1,0 +1,22 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{source-person}{
+  name    = {Source Person},
+  parents = {},
+  birth   = {1900-01-01}
+}
+
+\START
+\begin{document}
+
+\TEST{Registersource as footnote}{
+  \begin{registersection}
+  \mainperson{source-person} was born in
+  Boston\registersource{Parish records, St.\ Paul's Church, Boston.}.
+  \end{registersection}
+}
+
+\end{document}
+\END

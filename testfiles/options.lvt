@@ -26,20 +26,30 @@
 \START
 \begin{document}
 
-\begin{registersection}
-\mainperson{grandparent} test.
+\TEST{Abbreviated parents in ancestor chain}{
+  \begin{registersection}
+  \mainperson{grandparent} test.
+  \mainperson{parent-opt} test.
+  \mainperson{child-opt} test.
+  \end{registersection}
+}
 
-\mainperson{parent-opt} test.
+\TEST{Occupation accessor}{
+  \TYPE{\csuse{r@occupation@child-opt}}
+  Occupation: \getpersonoccupation{child-opt}.
+}
 
-\mainperson{child-opt} test.
+\TEST{Shorthand macros}{
+  \TYPE{\born{1900}}
+  \TYPE{\died{1950}}
+  \TYPE{\married{1925}}
+  \TYPE{\baptized{1900}}
+  \TYPE{\buried{1950}}
+}
 
-Occupation: \getpersonoccupation{child-opt}.
-
-Shorthand: \born{1900}, \died{1950}, \married{1925},
-\baptized{1900}, \buried{1950}.
-
-\place{Boston} and \dated{1900}.
-\end{registersection}
+\TEST{Place and dated shorthands}{
+  \place{Boston} and \dated{1900}.
+}
 
 \end{document}
 \END

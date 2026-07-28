@@ -21,10 +21,23 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line ....
 LaTeX Font Info:    ... okay on input line ....
 Package hyperref Info: Link coloring OFF on input line ....
 \@outlinefile=\write...
+============================================================
+TEST 1: Children environment
+============================================================
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line ....
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line ....
+============================================================
+============================================================
+TEST 2: Continued child entry
+============================================================
+============================================================
+============================================================
+TEST 3: Parent mismatch warning
+============================================================
+Package registerstyle Warning: Child `child-wrong-parents' listed under parents `parent-a,parent-b' but has parents `parent-a' on input line ....
+============================================================
 [1
 ] (children.aux)
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.

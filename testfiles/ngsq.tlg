@@ -1,6 +1,6 @@
 This is a generated file for the l3build validation system.
 Don't change this file in any respect.
-No file marriage.aux.
+No file ngsq.aux.
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line ....
 LaTeX Font Info:    ... okay on input line ....
 LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line ....
@@ -22,42 +22,19 @@ LaTeX Font Info:    ... okay on input line ....
 Package hyperref Info: Link coloring OFF on input line ....
 \@outlinefile=\write...
 ============================================================
-TEST 1: Marriage count storage
+TEST 1: NGSQ numbering in main entries
 ============================================================
-husband count: 2
-inline count: 1
-wife-one count: 0
-============================================================
-============================================================
-TEST 2: Marriage data storage
-============================================================
-m1 date: ....-..-..
-m1 place: Hartford, Connecticut
-m1 spouse: wife-one
-m2 date: ....-..-..
-m2 place: New Haven, Connecticut
-m2 spouse: wife-two
-============================================================
-============================================================
-TEST 3: Marriage accessor output
-============================================================
-============================================================
-============================================================
-TEST 4: Inline marriage keys
-============================================================
-inline date: ....-..-..
-inline place: Boston, Massachusetts
-============================================================
-============================================================
-TEST 5: Missing marriage warning
-============================================================
-Package registerstyle Warning: No marriage 3 for `husband' on input line ....
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line ....
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line ....
 ============================================================
 [1
-] (marriage.aux)
-Package rerunfilecheck Warning: File `marriage.out' has changed.
+] (ngsq.aux)
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+Package rerunfilecheck Warning: File `ngsq.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
 (rerunfilecheck)                or use package `bookmark'.
-Package rerunfilecheck Info: Checksums for `marriage.out':
+Package rerunfilecheck Info: Checksums for `ngsq.out':
 (rerunfilecheck)             Before: <no file>
 (rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.

@@ -31,20 +31,39 @@
   birth   = {1932-08-20}
 }
 
+\definepersonkv{child-wrong-parents}{
+  name    = {Wrong Child},
+  parents = {parent-a},
+  sex     = {M}
+}
+
 \START
 \begin{document}
 
-\begin{registersection}
-\mainperson{parent-a} test entry.
+\TEST{Children environment}{
+  \begin{registersection}
+  \mainperson{parent-a} test entry.
+  \begin{childrenof}{parent-a}{parent-b}
+    \childref{child-one}{b.~\getpersonbirthdate{child-one}.}
+    \child{child-two}{b.~\getpersonbirthdate{child-two}. Died young.}
+  \end{childrenof}
+  \end{registersection}
+}
 
-Children of Parent A and Parent B:
-\begin{childrenof}{parent-a}{parent-b}
-  \childref{child-one}{b.~\getpersonbirthdate{child-one}.}
-  \child{child-two}{b.~\getpersonbirthdate{child-two}. Died young.}
-\end{childrenof}
+\TEST{Continued child entry}{
+  \begin{registersection}
+  \mainperson{child-one} was born \getpersonbirthdate{child-one}.
+  \end{registersection}
+}
 
-\mainperson{child-one} was born \getpersonbirthdate{child-one}.
-\end{registersection}
+\TEST{Parent mismatch warning}{
+  \begin{registersection}
+  \mainperson{parent-a} test.
+  \begin{childrenof}{parent-a}{parent-b}
+    \child{child-wrong-parents}{test.}
+  \end{childrenof}
+  \end{registersection}
+}
 
 \end{document}
 \END

@@ -21,10 +21,32 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line ....
 LaTeX Font Info:    ... okay on input line ....
 Package hyperref Info: Link coloring OFF on input line ....
 \@outlinefile=\write...
+============================================================
+TEST 1: Abbreviated parents in ancestor chain
+============================================================
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line ....
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line ....
+============================================================
+============================================================
+TEST 2: Occupation accessor
+============================================================
+blacksmith
+============================================================
+============================================================
+TEST 3: Shorthand macros
+============================================================
+b.\ 1900
+d.\ 1950
+m.\ 1925
+bp.\ 1900
+bur.\ 1950
+============================================================
+============================================================
+TEST 4: Place and dated shorthands
+============================================================
+============================================================
 [1
 ] (options.aux)
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.

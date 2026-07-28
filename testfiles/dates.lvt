@@ -16,30 +16,63 @@
   burial-place  = {Forest Lawn, California}
 }
 
+\definepersonkv{minimal-date}{
+  name    = {Minimal Person},
+  parents = {},
+  birth   = {1900-06-01}
+}
+
 \START
 \begin{document}
 
-Birth date: \getpersonbirthdate{date-test}.
+\TEST{Birth date and place storage}{
+  \TYPE{\csuse{r@birth@date-test}}
+  \TYPE{\csuse{r@birthplace@date-test}}
+}
 
-Birth place: \getpersonbirthplace{date-test}.
+\TEST{Death date and place storage}{
+  \TYPE{\csuse{r@death@date-test}}
+  \TYPE{\csuse{r@deathplace@date-test}}
+}
 
-Death date: \getpersondeathdate{date-test}.
+\TEST{Baptism date and place storage}{
+  \TYPE{\csuse{r@baptism@date-test}}
+  \TYPE{\csuse{r@baptismplace@date-test}}
+}
 
-Death place: \getpersondeathplace{date-test}.
+\TEST{Burial date and place storage}{
+  \TYPE{\csuse{r@burial@date-test}}
+  \TYPE{\csuse{r@burialplace@date-test}}
+}
 
-Baptism date: \getpersonbaptismdate{date-test}.
+\TEST{Vital record accessor output}{
+  Birth date: \getpersonbirthdate{date-test}.
+  Birth place: \getpersonbirthplace{date-test}.
+  Death date: \getpersondeathdate{date-test}.
+  Death place: \getpersondeathplace{date-test}.
+  Baptism date: \getpersonbaptismdate{date-test}.
+  Baptism place: \getpersonbaptismplace{date-test}.
+  Burial date: \getpersonburialdate{date-test}.
+  Burial place: \getpersonburialplace{date-test}.
+}
 
-Baptism place: \getpersonbaptismplace{date-test}.
+\TEST{Approximate date qualifiers}{
+  \TYPE{\circa{1800}}
+  \TYPE{\before{1850}}
+  \TYPE{\after{1900}}
+  \TYPE{\between{1800}{1850}}
+  \TYPE{\aboutdate{1750}}
+  \TYPE{\probably{1820}}
+  \TYPE{\say{1700}}
+}
 
-Burial date: \getpersonburialdate{date-test}.
+\TEST{Formatted date}{
+  Formatted: \registerdate{2026-07-27}.
+}
 
-Burial place: \getpersonburialplace{date-test}.
-
-Approximate: \circa{1800}, \before{1850}, \after{1900},
-\between{1800}{1850}, \aboutdate{1750}, \probably{1820},
-\say{1700}.
-
-Formatted: \registerdate{2026-07-27}.
+\TEST{Invalid date warning}{
+  \registerdate{not-a-date}.
+}
 
 \end{document}
 \END

@@ -21,7 +21,6 @@
   sex     = {F}
 }
 
-% Inline marriage via definepersonkv keys
 \definepersonkv{inline-test}{
   name           = {Inline Test},
   parents        = {},
@@ -29,7 +28,6 @@
   marriage-place = {Boston, Massachusetts}
 }
 
-% Multiple marriages via \addmarriage
 \addmarriage{husband}{
   spouse = wife-one,
   date   = 1850-06-15,
@@ -45,23 +43,40 @@
 \START
 \begin{document}
 
-Marriage count for husband: \getmarriagecount{husband}.
+\TEST{Marriage count storage}{
+  \TYPE{husband count: \csuse{r@marriagecount@husband}}
+  \TYPE{inline count: \csuse{r@marriagecount@inline-test}}
+  \TYPE{wife-one count: \csuse{r@marriagecount@wife-one}}
+}
 
-First marriage date: \getmarriagedate{husband}{1}.
+\TEST{Marriage data storage}{
+  \TYPE{m1 date: \csuse{r@marriagedate@husband@1}}
+  \TYPE{m1 place: \csuse{r@marriageplace@husband@1}}
+  \TYPE{m1 spouse: \csuse{r@marriagespouse@husband@1}}
+  \TYPE{m2 date: \csuse{r@marriagedate@husband@2}}
+  \TYPE{m2 place: \csuse{r@marriageplace@husband@2}}
+  \TYPE{m2 spouse: \csuse{r@marriagespouse@husband@2}}
+}
 
-First marriage place: \getmarriageplace{husband}{1}.
+\TEST{Marriage accessor output}{
+  First marriage date: \getmarriagedate{husband}{1}.
+  First marriage place: \getmarriageplace{husband}{1}.
+  First marriage spouse: \getmarriagespouse{husband}{1}.
+  Second marriage date: \getmarriagedate{husband}{2}.
+  Second marriage place: \getmarriageplace{husband}{2}.
+  Second marriage spouse: \getmarriagespouse{husband}{2}.
+}
 
-First marriage spouse: \getmarriagespouse{husband}{1}.
+\TEST{Inline marriage keys}{
+  \TYPE{inline date: \csuse{r@marriagedate@inline-test@1}}
+  \TYPE{inline place: \csuse{r@marriageplace@inline-test@1}}
+  Inline date: \getmarriagedate{inline-test}{1}.
+  Inline place: \getmarriageplace{inline-test}{1}.
+}
 
-Second marriage date: \getmarriagedate{husband}{2}.
-
-Second marriage place: \getmarriageplace{husband}{2}.
-
-Second marriage spouse: \getmarriagespouse{husband}{2}.
-
-Inline marriage date: \getmarriagedate{inline-test}{1}.
-
-Inline marriage place: \getmarriageplace{inline-test}{1}.
+\TEST{Missing marriage warning}{
+  \getmarriagedate{husband}{3}.
+}
 
 \end{document}
 \END

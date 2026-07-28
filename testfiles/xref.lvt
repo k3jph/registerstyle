@@ -1,0 +1,34 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{ancestor}{
+  name      = {Ancestor Person},
+  preferred = {Ancestor},
+  parents   = {}
+}
+
+\definepersonkv{descendant}{
+  name      = {Descendant Person},
+  preferred = {Descendant},
+  parents   = {ancestor},
+  lineage-parent = {ancestor}
+}
+
+\START
+\begin{document}
+
+\TEST{Xrefperson output}{
+  \begin{registersection}
+  \mainperson{ancestor} test.
+  \mainperson{descendant} test.
+  See \xrefperson{ancestor}.
+  \end{registersection}
+}
+
+\TEST{Childname output}{
+  \childname{ancestor} and \childname{descendant}.
+}
+
+\end{document}
+\END

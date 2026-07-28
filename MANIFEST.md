@@ -57,3 +57,11 @@ These files are generated from the source files.
 * `testfiles/childref.tlg`
 * `testfiles/options.lvt`
 * `testfiles/options.tlg`
+* `testfiles/xref.lvt`
+* `testfiles/xref.tlg`
+* `testfiles/ngsq.lvt`
+* `testfiles/ngsq.tlg`
+* `testfiles/source.lvt`
+* `testfiles/source.tlg`
+* `testfiles/legacy.lvt`
+* `testfiles/legacy.tlg`

@@ -29,17 +29,21 @@
 \START
 \begin{document}
 
-\begin{registersection}
-\mainperson{parent} test entry.
+\TEST{Childref continuation marker}{
+  \begin{registersection}
+  \mainperson{parent} test entry.
+  \begin{childrenof}{parent}{spouse}
+    \childref{continued-child}{b.~1950. Will appear later.}
+    \child{terminal-child}{b.~1952. Died without issue.}
+  \end{childrenof}
+  \end{registersection}
+}
 
-Children:
-\begin{childrenof}{parent}{spouse}
-  \childref{continued-child}{b.~1950. Will appear later.}
-  \child{terminal-child}{b.~1952. Died without issue.}
-\end{childrenof}
-
-\mainperson{continued-child} continued entry.
-\end{registersection}
+\TEST{Continued child as main entry}{
+  \begin{registersection}
+  \mainperson{continued-child} continued entry.
+  \end{registersection}
+}
 
 \end{document}
 \END
