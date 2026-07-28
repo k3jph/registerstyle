@@ -20,19 +20,14 @@ jobs:
             l3build
             latex
             latex-bin
-            xparse
             enumitem
             etoolbox
-            keyval
-            xspace
             datetime2
             datetime2-english
             tracklang
             hyperref
             imakeidx
-            ltxdoc
             lm
-            fontenc
 
       - name: Build package
         run: l3build unpack
