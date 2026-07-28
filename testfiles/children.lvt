@@ -1,0 +1,69 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{parent-a}{
+  name    = {Parent A},
+  parents = {},
+  sex     = {M}
+}
+
+\definepersonkv{parent-b}{
+  name    = {Parent B},
+  parents = {},
+  sex     = {F}
+}
+
+\definepersonkv{child-one}{
+  name    = {Child One},
+  parents = {parent-a,parent-b},
+  lineage-parent = {parent-a},
+  sex     = {M},
+  birth   = {1930-06-15}
+}
+
+\definepersonkv{child-two}{
+  name    = {Child Two},
+  parents = {parent-a,parent-b},
+  lineage-parent = {parent-a},
+  sex     = {F},
+  birth   = {1932-08-20}
+}
+
+\definepersonkv{child-wrong-parents}{
+  name    = {Wrong Child},
+  parents = {parent-a},
+  sex     = {M}
+}
+
+\START
+\begin{document}
+
+\TEST{Children environment}{
+  \begin{registersection}
+  \mainperson{parent-a} test entry.
+  \begin{childrenof}{parent-a}{parent-b}
+    \childref{child-one}{b.~\getpersonbirthdate{child-one}.}
+    \child{child-two}{b.~\getpersonbirthdate{child-two}. Died young.}
+  \end{childrenof}
+  \end{registersection}
+}
+
+\TEST{Continued child entry}{
+  \begin{registersection}
+  \mainperson{child-one} was born \getpersonbirthdate{child-one}.
+  \end{registersection}
+}
+
+\TEST{Parent mismatch warning}{
+  \begin{registersection}
+  \mainperson{parent-a} test.
+  \begin{childrenof}{parent-a}{parent-b}
+    \child{child-wrong-parents}{test.}
+  \end{childrenof}
+  \end{registersection}
+}
+
+\end{document}
+\END

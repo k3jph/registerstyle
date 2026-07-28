@@ -1,0 +1,34 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex,ngsq]{registerstyle}
+
+\definepersonkv{ngsq-root}{
+  name    = {Root Person},
+  parents = {}
+}
+
+\definepersonkv{ngsq-child}{
+  name    = {Child Person},
+  parents = {ngsq-root},
+  lineage-parent = {ngsq-root}
+}
+
+\definepersonkv{ngsq-grandchild}{
+  name    = {Grandchild Person},
+  parents = {ngsq-child},
+  lineage-parent = {ngsq-child}
+}
+
+\START
+\begin{document}
+
+\TEST{NGSQ numbering in main entries}{
+  \begin{registersection}
+  \mainperson{ngsq-root} test.
+  \mainperson{ngsq-child} test.
+  \mainperson{ngsq-grandchild} test.
+  \end{registersection}
+}
+
+\end{document}
+\END

@@ -1,0 +1,51 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,noindex]{registerstyle}
+
+\definepersonkv{test-person}{
+  name      = {Test Person},
+  preferred = {Test},
+  parents   = {},
+  sex       = {M},
+  birth     = {1900-01-01}
+}
+
+\definepersonkv{child-person}{
+  name      = {Child Person},
+  preferred = {Child},
+  parents   = {test-person},
+  sex       = {F},
+  birth     = {1925-06-15}
+}
+
+\START
+\begin{document}
+
+\TEST{Person name storage}{
+  \TYPE{\csuse{r@name@test-person}}
+  \TYPE{\csuse{r@preferred@test-person}}
+  \TYPE{\csuse{r@sex@test-person}}
+  \TYPE{\csuse{r@birth@test-person}}
+}
+
+\TEST{Person parents}{
+  \TYPE{parents of child: \csuse{r@parents@child-person}}
+  \TYPE{parents of root: \csuse{r@parents@test-person}}
+}
+
+\TEST{Generation via internal}{
+  \getgeneration{test-person}%
+  \TYPE{gen root: \csuse{r@generation@test-person}}
+  \getgeneration{child-person}%
+  \TYPE{gen child: \csuse{r@generation@child-person}}
+}
+
+\TEST{Main person entry}{
+  \begin{registersection}
+  \mainperson{test-person} was born \getpersonbirthdate{test-person}.
+  \end{registersection}
+}
+
+\end{document}
+\END

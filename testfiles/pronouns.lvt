@@ -1,0 +1,53 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{male-person}{
+  name    = {Male Person},
+  parents = {},
+  sex     = {M}
+}
+
+\definepersonkv{female-person}{
+  name    = {Female Person},
+  parents = {},
+  sex     = {F}
+}
+
+\definepersonkv{neutral-person}{
+  name    = {Neutral Person},
+  parents = {}
+}
+
+\START
+\begin{document}
+
+\TEST{Sex field storage}{
+  \TYPE{male: \csuse{r@sex@male-person}}
+  \TYPE{female: \csuse{r@sex@female-person}}
+  \TYPE{neutral: \csuse{r@sex@neutral-person}}
+}
+
+\TEST{Male pronoun output}{
+  \heshethey{male-person}, \himherthem{male-person},
+  \hishertheirargs{male-person}, \HeSheThey{male-person},
+  \HimHerThem{male-person}, \HisHerTheir{male-person},
+  \himselfherselfthemself{male-person}.
+}
+
+\TEST{Female pronoun output}{
+  \heshethey{female-person}, \himherthem{female-person},
+  \hishertheirargs{female-person}, \HeSheThey{female-person},
+  \HimHerThem{female-person}, \HisHerTheir{female-person},
+  \himselfherselfthemself{female-person}.
+}
+
+\TEST{Neutral pronoun output}{
+  \heshethey{neutral-person}, \himherthem{neutral-person},
+  \hishertheirargs{neutral-person}, \HeSheThey{neutral-person},
+  \HimHerThem{neutral-person}, \HisHerTheir{neutral-person},
+  \himselfherselfthemself{neutral-person}.
+}
+
+\end{document}
+\END

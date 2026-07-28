@@ -1,0 +1,61 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{gen1}{
+  name    = {Generation One},
+  parents = {}
+}
+
+\definepersonkv{gen2}{
+  name    = {Generation Two},
+  parents = {gen1}
+}
+
+\definepersonkv{gen3}{
+  name    = {Generation Three},
+  parents = {gen2}
+}
+
+\definepersonkv{gen4}{
+  name    = {Generation Four},
+  parents = {gen3}
+}
+
+\definepersonkv{gen2-other}{
+  name    = {Generation Two Other},
+  parents = {gen1}
+}
+
+\definepersonkv{gen3-twoparents}{
+  name    = {Generation Three TwoParents},
+  parents = {gen2,gen2-other}
+}
+
+\START
+\begin{document}
+
+\TEST{Single-line generation numbers}{
+  \getgeneration{gen1}%
+  \TYPE{gen1: \csuse{r@generation@gen1}}
+  \getgeneration{gen2}%
+  \TYPE{gen2: \csuse{r@generation@gen2}}
+  \getgeneration{gen3}%
+  \TYPE{gen3: \csuse{r@generation@gen3}}
+  \getgeneration{gen4}%
+  \TYPE{gen4: \csuse{r@generation@gen4}}
+}
+
+\TEST{Two-parent generation}{
+  \getgeneration{gen3-twoparents}%
+  \TYPE{gen3-twoparents: \csuse{r@generation@gen3-twoparents}}
+}
+
+\TEST{Generation heading output}{
+  \generationheading{gen1}
+  \generationheading{gen3}
+  \generationheading{gen4}
+}
+
+\end{document}
+\END

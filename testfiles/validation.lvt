@@ -1,0 +1,46 @@
+\documentclass{article}
+\input regression-test.tex
+\usepackage[noindex]{registerstyle}
+
+\definepersonkv{bad-date}{
+  name    = {Bad Date Person},
+  parents = {},
+  birth   = {17 Dec 1985}
+}
+
+\definepersonkv{place-no-date}{
+  name        = {Place No Date},
+  parents     = {},
+  birth-place = {Somewhere, USA}
+}
+
+\definepersonkv{orphan}{
+  name    = {Orphan Person},
+  parents = {nonexistent-parent}
+}
+
+\definepersonkv{no-name}{
+  name    = {},
+  parents = {}
+}
+
+\definepersonkv{good-person}{
+  name    = {Good Person},
+  parents = {},
+  birth   = {1950-01-01},
+  birth-place = {Boston, Massachusetts}
+}
+
+\START
+\begin{document}
+
+\TEST{Checkregister warnings}{
+  \checkregister
+}
+
+\TEST{Checkperson on valid person}{
+  \checkperson{good-person}
+}
+
+\end{document}
+\END

@@ -1,0 +1,48 @@
+
+\documentclass{article}
+\usepackage[en-US]{datetime2}
+\usepackage[date=en-US,abbrevparents]{registerstyle}
+
+\definepersonkv{alex-example}{
+  name        = {Alex Example},
+  preferred   = {Alex},
+  parents     = {},
+  index       = {Example!Alex},
+  birth       = {1950-01-12},
+  birth-place = {Boston, Massachusetts}
+}
+
+\definepersonkv{jordan-sample}{
+  name        = {Jordan Sample},
+  preferred   = {Jordan},
+  parents     = {},
+  index       = {Sample!Jordan},
+  birth       = {1952-05-04},
+  birth-place = {Providence, Rhode Island}
+}
+
+\definepersonkv{casey-example}{
+  name        = {Casey Example},
+  preferred   = {Casey},
+  parents     = {alex-example,jordan-sample},
+  index       = {Example!Casey},
+  birth       = {1979-12-16},
+  birth-place = {Dayton, Ohio}
+}
+
+\begin{document}
+\section*{Minimal Register Example}
+
+\begin{registersection}
+\mainperson{alex-example} was born in \getpersonbirthplace{alex-example} on \getpersonbirthdate{alex-example}.
+
+The child of Alex Example and Jordan Sample is:
+\begin{childrenof}{alex-example}{jordan-sample}
+  \childref{casey-example}{b.~\getpersonbirthdate{casey-example}, \getpersonbirthplace{casey-example}.}
+\end{childrenof}
+
+\mainperson{casey-example} was born in \getpersonbirthplace{casey-example} on \getpersonbirthdate{casey-example}.
+\end{registersection}
+
+\checkregister
+\end{document}

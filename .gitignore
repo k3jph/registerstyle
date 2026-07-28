@@ -1,0 +1,28 @@
+# LaTeX build artifacts
+*.aux
+*.glo
+*.gls
+*.hd
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.pdf
+*.synctex.gz
+*.dvi
+*.fls
+*.fdb_latexmk
+
+# l3build
+build/
+*.zip
+
+# Editor
+*.swp
+*.swo
+*~
+.DS_Store
