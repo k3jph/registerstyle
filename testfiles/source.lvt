@@ -8,9 +8,11 @@
   birth   = {1900-01-01}
 }
 
-\START
 \begin{document}
+\START
+\OMIT
 
+\TIMO
 \TEST{Registersource as footnote}{
   \begin{registersection}
   \mainperson{source-person} was born in
@@ -18,5 +20,6 @@
   \end{registersection}
 }
 
+\OMIT
 \end{document}
 \END

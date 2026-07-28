@@ -15,9 +15,11 @@
   lineage-parent = {ancestor}
 }
 
-\START
 \begin{document}
+\START
+\OMIT
 
+\TIMO
 \TEST{Xrefperson output}{
   \begin{registersection}
   \mainperson{ancestor} test.
@@ -30,5 +32,6 @@
   \childname{ancestor} and \childname{descendant}.
 }
 
+\OMIT
 \end{document}
 \END
