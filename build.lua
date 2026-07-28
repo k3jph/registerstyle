@@ -19,7 +19,7 @@ testfiledir   = "testfiles"
 packtdszip    = true
 
 ctanpkg       = "registerstyle"
-ctanzip       = ctanpkg .. "-" .. "2.0"
+ctanzip       = ctanpkg .. "-" .. "1.0"
 
 uploadconfig = {
   author      = "James P. Howard, II",
@@ -29,5 +29,5 @@ uploadconfig = {
   pkg         = ctanpkg,
   summary     = "Typeset genealogical registers in the style of the New England Historic Genealogical Society",
   topic       = {"genealogy", "humanities"},
-  version     = "2.0",
+  version     = "1.0",
 }
