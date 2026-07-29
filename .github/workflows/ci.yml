@@ -30,6 +30,7 @@ jobs:
             hyperref
             hypdoc
             imakeidx
+            makeindex
             lm
             ec
 
