@@ -30,5 +30,5 @@ inline place: Boston, Massachusetts
 ============================================================
 TEST 5: Missing marriage warning
 ============================================================
-Package registerstyle Warning: No marriage 3 for `husband' on input line ....
+Package nehgs-register Warning: No marriage 3 for `husband' on input line ....
 ============================================================

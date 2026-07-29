@@ -1,6 +1,6 @@
 \documentclass{article}
 \input regression-test.tex
-\usepackage[noindex]{registerstyle}
+\usepackage[noindex]{nehgs-register}
 
 \definepersonkv{gen1}{
   name    = {Generation One},

@@ -1,4 +1,4 @@
-# Manifest for registerstyle
+# Manifest for nehgs-register
 
 This file is a listing of all files considered to be part of this work.
 
@@ -14,15 +14,15 @@ These are files in the development repository that are not distributed.
 
 These are source files for the package.
 
-* `source/registerstyle.dtx`
-* `source/registerstyle.ins`
+* `source/nehgs-register.dtx`
+* `source/nehgs-register.ins`
 
 ## Derived files
 
 These files are generated from the source files.
 
-* `registerstyle.sty`
-* `registerstyle.pdf`
+* `nehgs-register.sty`
+* `nehgs-register.pdf`
 
 ## Documentation files
 
