@@ -21,6 +21,7 @@ jobs:
             latex
             latex-bin
             tools
+            l3packages
             enumitem
             etoolbox
             datetime2
@@ -40,10 +41,12 @@ jobs:
         if: failure()
         run: |
           cat build/test/*.diff 2>/dev/null || true
-          echo "=== Raw log (basic) ==="
-          head -50 build/test/basic.log 2>/dev/null || true
+          echo "=== Raw log (basic, last 80 lines) ==="
+          tail -80 build/test/basic.log 2>/dev/null || true
           echo "=== Checking key packages ==="
           kpsewhich xspace.sty xparse.sty regression-test.tex 2>&1 || true
+          echo "=== Normalized log (basic) ==="
+          cat build/test/basic.pdftex.log 2>/dev/null || true
 
       - name: Build documentation
         run: l3build doc
