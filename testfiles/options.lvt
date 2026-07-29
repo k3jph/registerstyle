@@ -1,7 +1,7 @@
 \documentclass{article}
 \input regression-test.tex
 \usepackage[en-US]{datetime2}
-\usepackage[date=en-US,abbrevparents,noindex]{registerstyle}
+\usepackage[date=en-US,abbrevparents,noindex]{nehgs-register}
 
 \definepersonkv{grandparent}{
   name      = {Grandparent Person},

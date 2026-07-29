@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the `registerstyle` package will be documented
+All notable changes to the `nehgs-register` package will be documented
 in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/),

@@ -1,7 +1,7 @@
 \documentclass{article}
 \input regression-test.tex
 \usepackage[en-US]{datetime2}
-\usepackage[date=en-US,noindex]{registerstyle}
+\usepackage[date=en-US,noindex]{nehgs-register}
 
 \definepersonkv{date-test}{
   name        = {Date Test Person},

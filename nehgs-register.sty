@@ -1,4 +1,4 @@
-%% registerstyle.sty --- NEHGS-style genealogical register
+%% nehgs-register.sty --- NEHGS-style genealogical register
 %% Copyright 2026 James P. Howard, II <jh@jameshoward.us>
 %%
 %% This work may be distributed and/or modified under the
@@ -13,7 +13,7 @@
 %% The Current Maintainer of this work is James P. Howard, II.
 
 \NeedsTeXFormat{LaTeX2e}[2020/10/01]
-\ProvidesPackage{registerstyle}[2026/07/27 v1.0 NEHGS-style genealogical register]
+\ProvidesPackage{nehgs-register}[2026/07/29 v1.0.2 NEHGS-style genealogical register]
 
 %% ---- Package options ------------------------------------------------
 
@@ -49,15 +49,15 @@
           \ifx\r@optionvalue\r@ngsqvalue
             \r@option@ngsqtrue
           \else
-            \PackageWarning{registerstyle}{Unknown numbering style `\r@optionvalue'}%
+            \PackageWarning{nehgs-register}{Unknown numbering style `\r@optionvalue'}%
           \fi
         \else
-          \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+          \PackageWarning{nehgs-register}{Unknown option `\CurrentOption'}%
         \fi
       \fi
     \fi
   \else
-    \PackageWarning{registerstyle}{Unknown option `\CurrentOption'}%
+    \PackageWarning{nehgs-register}{Unknown option `\CurrentOption'}%
   \fi
 }
 
@@ -89,7 +89,7 @@
 %% ---- Internal helpers -----------------------------------------------
 
 \newcommand{\r@trimid}[1]{\zap@space#1 \@empty}
-\newcommand{\r@warn}[1]{\PackageWarning{registerstyle}{#1}}
+\newcommand{\r@warn}[1]{\PackageWarning{nehgs-register}{#1}}
 \newcommand{\r@indexperson}[1]{\ifr@index\index{#1}\fi}
 
 \newcommand{\r@unknowngeneration}{0}
@@ -768,33 +768,33 @@
 }
 
 \ExplSyntaxOn
-\cs_new_protected:Npn \registerstyle_date:n #1
+\cs_new_protected:Npn \nehgs_register_date:n #1
   {
     \regex_match:nnTF { \A \d{4} - \d{2} - \d{2} \Z } {#1}
       { \DTMdate{#1} }
       {
-        \PackageWarning{registerstyle}{Date~`#1'~is~not~in~YYYY-MM-DD~form}
+        \PackageWarning{nehgs-register}{Date~`#1'~is~not~in~YYYY-MM-DD~form}
         #1
       }
   }
 
-\NewDocumentCommand{\registerdate}{m}{\registerstyle_date:n{#1}}
+\NewDocumentCommand{\registerdate}{m}{\nehgs_register_date:n{#1}}
 \ExplSyntaxOff
 
 %% ---- Date validation ------------------------------------------------
 
 \ExplSyntaxOn
 \cs_generate_variant:Nn \regex_match:nnF { neF }
-\cs_new_protected:Npn \registerstyle_validate_iso_date:nn #1 #2
+\cs_new_protected:Npn \nehgs_register_validate_iso_date:nn #1 #2
   {
     \tl_if_blank:nF {#2}
       {
         \regex_match:neF { \A \d{4} - \d{2} - \d{2} \Z } {#2}
-          { \PackageWarning{registerstyle}{#1~date~`#2'~is~not~in~YYYY-MM-DD~form} }
+          { \PackageWarning{nehgs-register}{#1~date~`#2'~is~not~in~YYYY-MM-DD~form} }
       }
   }
 \NewDocumentCommand{\r@validateisodate}{m m}
-  {\registerstyle_validate_iso_date:nn {#1} {#2}}
+  {\nehgs_register_validate_iso_date:nn {#1} {#2}}
 \ExplSyntaxOff
 
 %% ---- Validation commands --------------------------------------------

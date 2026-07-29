@@ -132,8 +132,8 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 gen: \begingroup \edef {leg-child}\begingroup \edef {}\csdef {r@generation@working@}{1}\protect \begingroup \def \MessageBreak {
-(registerstyle)                }\let \protect \immediate\write \@unused {
-Package registerstyle Warning: Undefined person `'; assigning generation 0 on input line ....
+(nehgs-register)                }\let \protect \immediate\write \@unused {
+Package nehgs-register Warning: Undefined person `'; assigning generation 0 on input line ....
 }\endgroup \xdef \r@generation@ {0}\csundef {r@generation@working@}\endgroup \xdef {\r@generation@ }\endgroup 
 ============================================================
 ============================================================
