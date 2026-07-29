@@ -28,8 +28,10 @@ jobs:
             datetime2-english
             tracklang
             hyperref
+            hypdoc
             imakeidx
             lm
+            ec
 
       - name: Build package
         run: l3build unpack
