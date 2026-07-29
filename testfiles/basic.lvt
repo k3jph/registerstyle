@@ -19,10 +19,8 @@
   birth     = {1925-06-15}
 }
 
-\START
-\OMIT
 \begin{document}
-\TIMO
+\START
 \TEST{Person name storage}{
   \TYPE{\csuse{r@name@test-person}}
   \TYPE{\csuse{r@preferred@test-person}}
@@ -50,4 +48,3 @@
 
 \OMIT
 \end{document}
-\END

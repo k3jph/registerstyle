@@ -26,10 +26,8 @@
   birth   = {1952-06-15}
 }
 
-\START
-\OMIT
 \begin{document}
-\TIMO
+\START
 \TEST{Childref continuation marker}{
   \begin{registersection}
   \mainperson{parent} test entry.
@@ -48,4 +46,3 @@
 
 \OMIT
 \end{document}
-\END

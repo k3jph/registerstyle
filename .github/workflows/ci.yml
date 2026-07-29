@@ -20,6 +20,7 @@ jobs:
             l3build
             latex
             latex-bin
+            tools
             enumitem
             etoolbox
             datetime2
@@ -37,7 +38,12 @@ jobs:
 
       - name: Show test diffs
         if: failure()
-        run: cat build/test/*.diff 2>/dev/null || true
+        run: |
+          cat build/test/*.diff 2>/dev/null || true
+          echo "=== Raw log (basic) ==="
+          head -50 build/test/basic.log 2>/dev/null || true
+          echo "=== Checking key packages ==="
+          kpsewhich xspace.sty xparse.sty regression-test.tex 2>&1 || true
 
       - name: Build documentation
         run: l3build doc

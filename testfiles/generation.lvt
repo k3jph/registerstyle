@@ -32,10 +32,8 @@
   parents = {gen2,gen2-other}
 }
 
-\START
-\OMIT
 \begin{document}
-\TIMO
+\START
 \TEST{Single-line generation numbers}{
   \getgeneration{gen1}%
   \TYPE{gen1: \csuse{r@generation@gen1}}
@@ -60,4 +58,3 @@
 
 \OMIT
 \end{document}
-\END

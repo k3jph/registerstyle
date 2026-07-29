@@ -40,10 +40,8 @@
   place  = {New Haven, Connecticut}
 }
 
-\START
-\OMIT
 \begin{document}
-\TIMO
+\START
 \TEST{Marriage count storage}{
   \TYPE{husband count: \csuse{r@marriagecount@husband}}
   \TYPE{inline count: \csuse{r@marriagecount@inline-test}}
@@ -81,4 +79,3 @@
 
 \OMIT
 \end{document}
-\END

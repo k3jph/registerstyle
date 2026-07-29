@@ -31,10 +31,8 @@
   birth-place = {Boston, Massachusetts}
 }
 
-\START
-\OMIT
 \begin{document}
-\TIMO
+\START
 \TEST{Checkregister warnings}{
   \checkregister
 }
@@ -45,4 +43,3 @@
 
 \OMIT
 \end{document}
-\END
