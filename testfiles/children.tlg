@@ -15,5 +15,5 @@ TEST 2: Continued child entry
 ============================================================
 TEST 3: Parent mismatch warning
 ============================================================
-Package registerstyle Warning: Child `child-wrong-parents' listed under parents `parent-a,parent-b' but has parents `parent-a' on input line ....
+Package nehgs-register Warning: Child `child-wrong-parents' listed under parents `parent-a,parent-b' but has parents `parent-a' on input line ....
 ============================================================

@@ -1,6 +1,6 @@
 \documentclass{article}
 \input regression-test.tex
-\usepackage[noindex,ngsq]{registerstyle}
+\usepackage[noindex,ngsq]{nehgs-register}
 
 \definepersonkv{ngsq-root}{
   name    = {Root Person},

@@ -1,11 +1,11 @@
-# registerstyle
+# nehgs-register
 
-[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/k3jph/registerstyle)
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/k3jph/nehgs-register)
 [![Homepage](https://img.shields.io/badge/homepage-jameshoward.us-0b2f5b.svg?style=for-the-badge&labelColor=f3dd78)](https://jameshoward.us)
 
-[![CI (main)](https://github.com/k3jph/registerstyle/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/k3jph/registerstyle/actions/workflows/ci.yml)
-[![CI (develop)](https://github.com/k3jph/registerstyle/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/k3jph/registerstyle/actions/workflows/ci.yml)
-[![License: LPPL 1.3c](https://img.shields.io/badge/license-LPPL%201.3c-blue.svg)](https://github.com/k3jph/registerstyle/blob/main/LICENSE)
+[![CI (main)](https://github.com/k3jph/nehgs-register/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/k3jph/nehgs-register/actions/workflows/ci.yml)
+[![CI (develop)](https://github.com/k3jph/nehgs-register/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/k3jph/nehgs-register/actions/workflows/ci.yml)
+[![License: LPPL 1.3c](https://img.shields.io/badge/license-LPPL%201.3c-blue.svg)](https://github.com/k3jph/nehgs-register/blob/main/LICENSE)
 
 A LaTeX package for typesetting genealogical registers in the style of
 the *New England Historical and Genealogical Register* (NEHGS).
@@ -49,10 +49,10 @@ l3build unpack
 Or manually:
 
 ```sh
-latex source/registerstyle.ins
+latex source/nehgs-register.ins
 ```
 
-This extracts `registerstyle.sty` from `source/registerstyle.dtx`.
+This extracts `nehgs-register.sty` from `source/nehgs-register.dtx`.
 Move the resulting `.sty` file to a directory searched by TeX.
 
 To build the documentation:
@@ -72,7 +72,7 @@ l3build check
 ```latex
 \documentclass{article}
 \usepackage[en-US]{datetime2}
-\usepackage[date=en-US,abbrevparents]{registerstyle}
+\usepackage[date=en-US,abbrevparents]{nehgs-register}
 
 \definepersonkv{john-doe}{
   name      = {John Doe},
