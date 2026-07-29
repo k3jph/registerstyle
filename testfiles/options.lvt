@@ -23,10 +23,9 @@
   occupation = {blacksmith}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Abbreviated parents in ancestor chain}{
   \begin{registersection}

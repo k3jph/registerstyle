@@ -15,10 +15,9 @@
   lineage-parent = {ancestor}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Xrefperson output}{
   \begin{registersection}

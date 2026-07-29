@@ -6,10 +6,9 @@
 \defineperson{leg-child}{leg-root}{Legacy Child}{Child}
 \defineperson{leg-indexed}{}{Indexed Person}{Indexed}[Custom Index Entry]
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Legacy positional person definition}{
   \TYPE{name: \csuse{r@name@leg-root}}

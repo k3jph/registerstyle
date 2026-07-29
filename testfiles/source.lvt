@@ -8,10 +8,9 @@
   birth   = {1900-01-01}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Registersource as footnote}{
   \begin{registersection}

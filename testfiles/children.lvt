@@ -37,10 +37,9 @@
   sex     = {M}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Children environment}{
   \begin{registersection}

@@ -32,10 +32,9 @@
   parents = {gen2,gen2-other}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Single-line generation numbers}{
   \getgeneration{gen1}%

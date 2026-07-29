@@ -22,10 +22,9 @@
   birth   = {1900-06-01}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Birth date and place storage}{
   \TYPE{\csuse{r@birth@date-test}}

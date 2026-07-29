@@ -19,10 +19,9 @@
   parents = {}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{Sex field storage}{
   \TYPE{male: \csuse{r@sex@male-person}}

@@ -19,10 +19,9 @@
   lineage-parent = {ngsq-child}
 }
 
-\begin{document}
 \START
 \OMIT
-
+\begin{document}
 \TIMO
 \TEST{NGSQ numbering in main entries}{
   \begin{registersection}
