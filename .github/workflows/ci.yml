@@ -35,5 +35,9 @@ jobs:
       - name: Run tests
         run: l3build check
 
+      - name: Show test diffs
+        if: failure()
+        run: cat build/test/*.diff 2>/dev/null || true
+
       - name: Build documentation
         run: l3build doc
