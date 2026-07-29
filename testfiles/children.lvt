@@ -37,9 +37,8 @@
   sex     = {M}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Children environment}{
   \begin{registersection}
   \mainperson{parent-a} test entry.
@@ -65,5 +64,5 @@
   \end{registersection}
 }
 
+\OMIT
 \end{document}
-\END

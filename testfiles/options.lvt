@@ -23,9 +23,8 @@
   occupation = {blacksmith}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Abbreviated parents in ancestor chain}{
   \begin{registersection}
   \mainperson{grandparent} test.
@@ -51,5 +50,5 @@
   \place{Boston} and \dated{1900}.
 }
 
+\OMIT
 \end{document}
-\END

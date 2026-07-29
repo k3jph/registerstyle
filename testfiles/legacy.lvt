@@ -6,9 +6,8 @@
 \defineperson{leg-child}{leg-root}{Legacy Child}{Child}
 \defineperson{leg-indexed}{}{Indexed Person}{Indexed}[Custom Index Entry]
 
-\START
 \begin{document}
-
+\START
 \TEST{Legacy positional person definition}{
   \TYPE{name: \csuse{r@name@leg-root}}
   \TYPE{preferred: \csuse{r@preferred@leg-root}}
@@ -32,5 +31,5 @@
   \end{registersection}
 }
 
+\OMIT
 \end{document}
-\END

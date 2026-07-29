@@ -22,9 +22,8 @@
   birth   = {1900-06-01}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Birth date and place storage}{
   \TYPE{\csuse{r@birth@date-test}}
   \TYPE{\csuse{r@birthplace@date-test}}
@@ -74,5 +73,5 @@
   \registerdate{not-a-date}.
 }
 
+\OMIT
 \end{document}
-\END

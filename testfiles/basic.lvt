@@ -19,9 +19,8 @@
   birth     = {1925-06-15}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Person name storage}{
   \TYPE{\csuse{r@name@test-person}}
   \TYPE{\csuse{r@preferred@test-person}}
@@ -47,5 +46,5 @@
   \end{registersection}
 }
 
+\OMIT
 \end{document}
-\END

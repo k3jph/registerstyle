@@ -19,9 +19,8 @@
   lineage-parent = {ngsq-child}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{NGSQ numbering in main entries}{
   \begin{registersection}
   \mainperson{ngsq-root} test.
@@ -30,5 +29,5 @@
   \end{registersection}
 }
 
+\OMIT
 \end{document}
-\END

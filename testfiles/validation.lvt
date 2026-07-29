@@ -31,9 +31,8 @@
   birth-place = {Boston, Massachusetts}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Checkregister warnings}{
   \checkregister
 }
@@ -42,5 +41,5 @@
   \checkperson{good-person}
 }
 
+\OMIT
 \end{document}
-\END

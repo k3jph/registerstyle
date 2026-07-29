@@ -19,9 +19,8 @@
   parents = {}
 }
 
-\START
 \begin{document}
-
+\START
 \TEST{Sex field storage}{
   \TYPE{male: \csuse{r@sex@male-person}}
   \TYPE{female: \csuse{r@sex@female-person}}
@@ -49,5 +48,5 @@
   \himselfherselfthemself{neutral-person}.
 }
 
+\OMIT
 \end{document}
-\END
